@@ -3,5 +3,5 @@
 
   python -m pip install psycopg2-binary
 
-To run:
-python register.py
+To run go to src folder:
+python main.py
