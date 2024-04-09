@@ -1,13 +1,66 @@
-def register_user(connection):
-    """Register a new user."""
+import psycopg2
+
+def register_member(connection):
     try:
         cursor = connection.cursor()
+        print("Welcome new member!")
+        print("Lets you started on your Fitness journey.\n")
 
-        first_name = input("Enter first name: ")
-        last_name = input("Enter last name: ")
-        email = input("Enter email: ")
-        password = input("Enter password: ")
-        phone_number = input("Enter phone number: ")
+        while True:
+            first_name = input("Enter first name: ")
+            if(first_name == "0"):
+                cursor.close()
+                return
+            elif len(first_name) < 2:
+                print("Names must be at least 2 characters long.\n")
+            elif(not first_name.isalpha()):
+                print("Names can only contain characters.\n")
+            else:
+                break
+
+        while True:
+            last_name = input("Enter last name: ")
+            if(last_name == "0"):
+                cursor.close()
+                return
+            elif len(last_name) < 2:
+                print("Names must be at least 2 characters long.\n")
+            elif(not last_name.isalpha()):
+                print("Names can only contain characters.\n")
+            else:
+                break
+
+        while True:
+            email = input("Enter email: ")
+            if(email == "0"):
+                cursor.close()
+                return
+            elif "@" not in email:
+                print("Email must contain '@'.\n")
+            else:
+                break
+
+        while True:
+            password = input("Enter password: ")
+            if(password == "0"):
+                cursor.close()
+                return
+            elif len(password) < 6:
+                print("Password must be at least 6 characters long.\n")
+            else:
+                break
+
+        while True:
+            phone_number = input("Enter phone number: ")
+            if(phone_number == "0"):
+                cursor.close()
+                return
+            elif not phone_number.isdigit():
+                print("Phone number can contain only digits.\n")
+            elif(len(phone_number) != 10):
+                print("Phone number must be 10 characters long.]n")
+            else:
+                break
 
         cursor.execute("INSERT INTO Members (first_name, last_name, email, password, phone_number) VALUES (%s, %s, %s, %s, %s)",
                        (first_name, last_name, email, password, phone_number))
@@ -24,13 +77,21 @@ def register_user(connection):
         if connection:
             cursor.close()
 
-def login_user(connection):
-   while True:
-        try:
-            cursor = connection.cursor()
+def login_member(connection):
+    try:
+        cursor = connection.cursor()
+
+        print("Welcome back! \nLets get you logged in\n")
+
+        while True:
+            user = None
 
             email = input("Enter email: ")
+            if(email == "0"):
+              break
             password = input("Enter password: ")
+            if(password == "0"):
+              break
 
             cursor.execute("SELECT * FROM Members WHERE email = %s AND password = %s", (email, password))
 
@@ -38,55 +99,15 @@ def login_user(connection):
             user = cursor.fetchone()
 
             if user:
-                print("Login successful!")
-                print("Welcome,", user[1])  # user[1] is the first attribute (name)
                 break  # Break out of the loop if login is successful
             else:
-                print("Invalid email or password. Please try again.")
-
-        except (Exception, psycopg2.Error) as error:
-            print("Error during login:", error)
-
-        finally:
-            if connection:
-                cursor.close()
-
-def print_all_members(connection):
-    """Print all members from the Members table."""
-    try:
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM Members")
-
-        members = cursor.fetchall()
-
-        print("\n{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format("Member ID", "First Name", "Last Name", "Email", "Password", "Phone Number"))
-        print("-" * 100)
-
-        # Print each member
-        for member in members:
-            print("{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format(member[0], member[1], member[2], member[3], member[4], member[5]))
-        print("\n")
+                print("Invalid email or password. Please try again.\n")
 
     except (Exception, psycopg2.Error) as error:
-        print("Error retrieving members:", error)
+        print("Error during login:", error)
 
     finally:
         if connection:
             cursor.close()
-
-def delete_all_members(connection):
-    try:
-        cursor = connection.cursor()
-
-        cursor.execute("DELETE FROM Members")
-        connection.commit()
-
-        print("All members deleted successfully!")
-
-    except (Exception, psycopg2.Error) as error:
-        print("Error deleting members:", error)
-
-    finally:
-        if connection:
-            cursor.close()
+            return user
 

@@ -23,14 +23,19 @@ def print_all_members(connection):
         cursor.execute("SELECT * FROM Members")
 
         members = cursor.fetchall()
+        while True:
+            print("\n{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format("Member ID", "First Name", "Last Name", "Email", "Password", "Phone Number"))
+            print("-" * 100)
 
-        print("\n{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format("Member ID", "First Name", "Last Name", "Email", "Password", "Phone Number"))
-        print("-" * 100)
+            # Print each member
+            for member in members:
+                print("{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format(member[0], member[1], member[2], member[3], member[4], member[5]))
+            print("\n")
 
-        # Print each member
-        for member in members:
-            print("{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format(member[0], member[1], member[2], member[3], member[4], member[5]))
-        print("\n")
+            exit = input("Enter 0 to return: ")
+            if(exit == "0"):
+                break
+                
 
     except (Exception, psycopg2.Error) as error:
         print("Error retrieving members:", error)
