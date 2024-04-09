@@ -22,12 +22,16 @@ def main_menu(connection):
 
         if choice == "1":
             clear_terminal()
-            registration.register_member(connection)
+            user = registration.register_member(connection)
+            if(user):
+                clear_terminal()
+                registration.register_health_metrics(connection, user)
 
         elif choice == "2":
             clear_terminal()
             user = registration.login_member(connection)
             if(user):
+                clear_terminal()
                 member_menu(connection, user)
         # elif choice == "3":
 
@@ -45,7 +49,6 @@ def main_menu(connection):
 
 def member_menu(connection, user):
      while True:
-        #clear_terminal()
         print("Hello", user[1])
         print("Welcome Back!\n")
         print("1. Display Dashboard")
@@ -68,7 +71,6 @@ def member_menu(connection, user):
 
 def update_member_menu(connection, user):
     while True:
-        #clear_terminal()
         print("What would you like to update", user[1])
         print("1. Personal Information")
         print("2. Health Metrics")

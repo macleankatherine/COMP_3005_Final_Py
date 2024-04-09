@@ -1,4 +1,5 @@
 import psycopg2
+import database_operations
 
 def update_member_personal_info(connection, user):
     try:
@@ -83,7 +84,7 @@ def update_member_personal_info(connection, user):
                 break
         connection.commit()
 
-        user = get_user_by_member_id(connection, user_id)
+        user = database_operations.get_user_by_member_id(connection, user_id)
 
     except (Exception, psycopg2.Error) as error:
         if connection:
@@ -97,17 +98,3 @@ def update_member_personal_info(connection, user):
             return user
         
         
-def get_user_by_member_id(connection, member_id):
-    try:
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM Members WHERE member_id = %s", (member_id,))
-        user = cursor.fetchone()
-        return user
-    
-    except (Exception, psycopg2.Error) as error:
-        print("Failed to fetch user:", error)
-        return None
-    
-    finally:
-        if cursor:
-            cursor.close()

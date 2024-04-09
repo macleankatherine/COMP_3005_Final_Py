@@ -23,26 +23,34 @@ def print_all_members(connection):
         cursor.execute("SELECT * FROM Members")
 
         members = cursor.fetchall()
-        while True:
-            print("\n{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format("Member ID", "First Name", "Last Name", "Email", "Password", "Phone Number"))
-            print("-" * 100)
+        
+        if members:
+            while True:
+                print("\n{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}{:<15}{:<15}{:<15}".format(
+                    "Member ID", "First Name", "Last Name", "Email", "Password", "Phone Number", "Weight", "Height", "Body Fat"
+                ))
+                print("-" * 150)
 
-            # Print each member
-            for member in members:
-                print("{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}".format(member[0], member[1], member[2], member[3], member[4], member[5]))
-            print("\n")
+               # Print each member
+                for member in members:
+                    member_data = [str(field) if field is not None else "" for field in member]
+                    print("{:<10}{:<15}{:<15}{:<25}{:<15}{:<15}{:<15}{:<15}{:<15}".format(*member_data))
 
-            exit = input("Enter 0 to return: ")
-            if(exit == "0"):
-                break
+                print("\n")
+                exit = input("Enter 0 to return: ")
+                if exit == "0":
+                    break
+        else:
+            print("No members found.")
                 
-
     except (Exception, psycopg2.Error) as error:
         print("Error retrieving members:", error)
 
     finally:
         if connection:
             cursor.close()
+
+
 
 
 def delete_all_members(connection):
