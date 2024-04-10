@@ -10,15 +10,15 @@ CREATE TABLE IF NOT EXISTS Members(
     bodyfat_percent VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS exersize_routines(
-    routine_id SERIAL PRIMARY KEY,
-    member_id INT REFERENCES Members(member_id),
-    goal_name VARCHAR(255) NOT NULL,
-    goal_desciption VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS Fitness_Goals(
     goal_id SERIAL PRIMARY KEY,
+    member_id INT REFERENCES Members(member_id),
+    goal_name VARCHAR(255) NOT NULL,
+    goal_description VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS exersize_routines(
+    routine_id SERIAL PRIMARY KEY,
     member_id INT REFERENCES Members(member_id),
     goal_name VARCHAR(255) NOT NULL,
     goal_desciption VARCHAR(255) NOT NULL

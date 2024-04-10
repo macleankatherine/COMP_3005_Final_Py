@@ -1,5 +1,6 @@
 import psycopg2
 import database_operations
+import profile_management
 
 def register_member(connection):
     try:
@@ -11,59 +12,36 @@ def register_member(connection):
         while True:
             first_name = input("Enter first name: ")
             if(first_name == "0"):
-                cursor.close()
                 return None
-            elif len(first_name) < 2:
-                print("Names must be at least 2 characters long.\n")
-            elif(not first_name.isalpha()):
-                print("Names can only contain characters.\n")
-            else:
+            elif(profile_management.valid_name(first_name)):
                 break
 
         while True:
             last_name = input("Enter last name: ")
             if(last_name == "0"):
-                cursor.close()
                 return None
-            elif len(last_name) < 2:
-                print("Names must be at least 2 characters long.\n")
-            elif(not last_name.isalpha()):
-                print("Names can only contain characters.\n")
-            else:
+            elif(profile_management.valid_name(last_name)):
                 break
 
         while True:
             email = input("Enter email: ")
             if(email == "0"):
-                cursor.close()
                 return None
-            elif "@" not in email:
-                print("Email must contain '@'.\n")
-            elif(database_operations.is_email_in_database(connection, email)):
-                print("Email is already in use.\n")
-            else:
+            elif(profile_management.valid_email(connection, email)):
                 break
 
         while True:
             password = input("Enter password: ")
             if(password == "0"):
-                cursor.close()
                 return None
-            elif len(password) < 6:
-                print("Password must be at least 6 characters long.\n")
-            else:
+            elif(profile_management.valid_password(password)):
                 break
 
         while True:
             phone_number = input("Enter phone number: ")
             if(phone_number == "0"):
-                cursor.close()
                 return None
-            elif not phone_number.isdigit():
-                print("Phone number can contain only digits.\n")
-            elif(len(phone_number) != 10):
-                print("Phone number must be 10 characters long.\n")
-            else:
+            elif(profile_management.valid_phone_number(phone_number)):
                 break
 
         cursor.execute("INSERT INTO Members (first_name, last_name, email, password, phone_number) VALUES (%s, %s, %s, %s, %s)",
@@ -72,6 +50,7 @@ def register_member(connection):
 
         user = database_operations.get_user_by_email(connection, email)
         print("User registered successfully!")
+        return user
 
     except (Exception, psycopg2.Error) as error:
         if connection:
@@ -82,97 +61,31 @@ def register_member(connection):
     finally:
         if connection:
             cursor.close()
-            return user
 
 def register_health_metrics(connection, user):
     try:
         cursor = connection.cursor()
         print("Lets get to know you better")
-        print("Press enter to skip entering a value.\n")
-        print("Press > to switch units.\n")
+        print("Press enter to skip entering a value or > to switch units.\n")
         user_id = user[0]
+        orignal_user = user
 
-        weight_unit = "lbs"
-        while True:
-            weight = input("Enter weight ("+ weight_unit + "): ")
-            if(weight == "0"):
-                cursor.close()
-                return user
-            elif(weight == ""):
-                break
-            elif(weight == '>'): 
-                if(weight_unit == "lbs"):
-                    weight_unit = "kg"
-                elif(weight_unit == "kg"):
-                    weight_unit = "lbs"
-            elif not weight.isdigit():
-                print("Weight can contain only have digits.\n")
-            elif len(weight) < 2:
-                print("Weight must be at least 2 characters long.\n")
-            else:
-                weight += weight_unit
-                cursor.execute("UPDATE Members SET weight = %s WHERE member_id = %s",
-                    (weight, user_id))
-                break
+        user = profile_management.update_weight(connection, user)
 
-        while True:
+        if(user is None):
+           return orignal_user
+        
+        user = profile_management.update_height(connection, user)
+        if(user is None):
+            return orignal_user
 
-            height_input = input("Enter height (cm): ")
-            if height_input == "0":
-                return user
-            elif(height_input == ""):
-                break
-
-            elif height_input == ">":
-                while True:
-                    feet = input("Enter feet: ")
-                    if(feet == ">"):
-                        break
-                    inches = input("Enter inches: ")
-
-                    if not (feet.isdigit() and inches.isdigit()):
-                        print("Feet and inches must contain only digits.\n")
-                    elif int(feet) < 1:
-                        print("Feet must be at least 1.\n")
-                    else:
-                        height = f"{feet}ft {inches}in"
-                        cursor.execute("UPDATE Members SET height = %s WHERE member_id = %s",
-                        (height, user_id))
-                        break
-                if(feet != ">"):
-                    break
-
-            elif not height_input.isdigit():
-                print("Height must contain only digits.\n")
-
-            elif len(height_input) < 2:
-                print("Height in cm must be at least 2 characters long.\n")
-
-            else:
-                height = f"{height_input}cm"
-                cursor.execute("UPDATE Members SET height = %s WHERE member_id = %s",
-                    (height, user_id))
-                break
-
-        while True:
-
-            body_fat_perc = input("Enter body fat percentage: ")
-            if(body_fat_perc == "0"):
-                cursor.close()
-                return user
-            elif(body_fat_perc == ""):
-                break
-
-            elif len(body_fat_perc) < 1:
-                print("Body fat percent must be at least 1 characters long.\n")
-            else:
-                body_fat_perc += "%"
-                cursor.execute("UPDATE Members SET bodyfat_percent = %s WHERE member_id = %s",
-                    (body_fat_perc, user_id))
-                break
+        user = profile_management.update_bodyfat(connection, user)
+        if(user is None):
+            return orignal_user
 
         connection.commit()
         user = database_operations.get_user_by_member_id(connection, user_id)
+        return user
         
 
     except (Exception, psycopg2.Error) as error:
@@ -184,40 +97,33 @@ def register_health_metrics(connection, user):
     finally:
         if connection:
             cursor.close()
-            return user
-
-
-def login_member(connection):
+        
+def register_health_goal(connection, user):
     try:
         cursor = connection.cursor()
-
-        print("Welcome back! \nLets get you logged in\n")
+        print("What are your current fitness goals?")
+        print("Include anything will help your trainer create a personalized experience.\n")
+        member_id = user[0]
 
         while True:
-            user = None
+            name, details = profile_management.valid_goal(user)
 
-            email = input("Enter email: ")
-            if(email == "0"):
-              break
-            password = input("Enter password: ")
-            if(password == "0"):
-              break
+            cursor.execute("INSERT INTO Fitness_Goals (member_id, goal_name, goal_description) VALUES (%s, %s, %s)",
+                (member_id, name, details))
+            connection.commit()
 
-            cursor.execute("SELECT * FROM Members WHERE email = %s AND password = %s", (email, password))
-
-            #gets the user we're logging into
-            user = cursor.fetchone()
-
-            if user:
-                break  
-            else:
-                print("Invalid email or password. Please try again.\n")
+            print("\n1. Add another health goal. ")
+            print("0. Continue. ")
+            cont = input()
+            if(cont == "0"):
+                return user
 
     except (Exception, psycopg2.Error) as error:
-        print("Error during login:", error)
+        if connection:
+            print("Failed to register user health goals:", error)
+        else:
+            print("Failed to connect to database.")
 
     finally:
         if connection:
             cursor.close()
-            return user
-
