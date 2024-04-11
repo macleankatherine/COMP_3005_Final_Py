@@ -1,5 +1,6 @@
 import registration
 import profile_management
+import schedule_management
 import database
 import database_operations
 import os
@@ -62,23 +63,26 @@ def member_menu(connection, user):
         print("Hello", user[1])
         print("Welcome Back!\n")
         print("1. Display Dashboard")
-        print("2. Schedule Training")
-        print("3. Update Member Information")
-        print("4. print fitness goals DEBUG")
-        print("5. print members DEBUG")
+        print("2. Manage Personal Training")
+        print("3. Manage Group Training")
+        print("4. Update Member Information")
+        print("5. print fitness goals DEBUG")
+        print("6. print members DEBUG")
         print("0. Exit\n")
 
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            print_user(user)            
+            clear_terminal()
         # elif choice == "2":
         #     clear_terminal()
         elif choice == "3":
-            user = update_member_menu(connection, user)
+            user = schedule_group_menu(connection, user)
         elif choice == "4":
-            database_operations.print_fitness_goals(connection, user[0])
+            user = update_member_menu(connection, user)
         elif choice == "5":
+            database_operations.print_fitness_goals(connection, user[0])
+        elif choice == "6":
             database_operations.print_member(connection, user[0])
         elif choice == "0":
             break
@@ -139,11 +143,30 @@ def update_member_metric_menu(connection, user):
         else:
             print("Invalid choice. Please try again.")
 
+def schedule_group_menu(connection, user):
+    while True:
+        print("Select what you would like to do. \n")
+        print("1. Enroll in Group class ")
+        print("2. View enrolled classes ")
+        print("3. Drop a class ")
+        print("0. Go Back ")
 
-def print_user(user):
-    print("\nUser ID:", user[0])
-    print("First Name:", user[1])
-    print("Last Name:", user[2])
-    print("Email:", user[3])
-    print("Password:", user[4])
-    print("Phone Number:", user[5],"\n")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            #clear_terminal()
+            user = schedule_management.schedule_group_class(connection, user)
+
+        elif choice == "2":
+            #clear_terminal()
+            schedule_management.print_registered_group_classes(connection, user)
+
+        elif choice == "3":
+            #clear_terminal()
+            user = schedule_management.drop_group_class(connection, user)
+        elif choice == "0":
+            return user
+        else:
+            print("Invalid choice. Please try again.")
+
+

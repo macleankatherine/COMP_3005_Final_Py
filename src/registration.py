@@ -71,7 +71,6 @@ def register_health_metrics(connection, user):
         orignal_user = user
 
         user = profile_management.update_weight(connection, user)
-
         if(user is None):
            return orignal_user
         
@@ -106,7 +105,11 @@ def register_health_goal(connection, user):
         member_id = user[0]
 
         while True:
-            name, details = profile_management.valid_goal(user)
+            goals_info = profile_management.valid_goal()
+            if(goals_info is None):
+                return user
+            
+            name, details = goals_info
 
             cursor.execute("INSERT INTO Fitness_Goals (member_id, goal_name, goal_description) VALUES (%s, %s, %s)",
                 (member_id, name, details))

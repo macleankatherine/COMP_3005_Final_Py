@@ -274,10 +274,10 @@ def update_bodyfat(connection, user):
 
             body_fat_perc = input("Enter body fat percentage: ")
             if(body_fat_perc == "0"):
-                return user
+                return None
             elif(body_fat_perc == ""):
-                break
-
+                return user
+            
             elif len(body_fat_perc) < 1:
                 print("Body fat percent must be at least 1 characters long.\n")
             elif not body_fat_perc.isdigit():
@@ -302,7 +302,7 @@ def update_bodyfat(connection, user):
         if connection:
             cursor.close()
 
-def valid_goal(user):
+def valid_goal():
 
     while True:
         name = input("Enter the name of your goal: ")
