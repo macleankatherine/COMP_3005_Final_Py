@@ -55,9 +55,10 @@ CREATE TABLE IF NOT EXISTS Rooms (
 
 CREATE TABLE IF NOT EXISTS Room_Bookings (
     booking_id SERIAL PRIMARY KEY,
-    room_id INT UNIQUE REFERENCES Rooms(room_id),
-    start_datetime TIMESTAMP NOT NULL,
-    end_datetime TIMESTAMP NOT NULL,
+    room_id INT REFERENCES Rooms(room_id),
+    day_of_week VARCHAR(10) NOT NULL, -- 'Monday', 'Tuesday', etc.
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
     recurrence VARCHAR(255)
 );
 
@@ -128,4 +129,3 @@ CREATE TABLE IF NOT EXISTS Billing(
 -- SELECT *
 -- FROM Members 
 -- INNER JOIN Fitness_Goals ON Fitness_Goals.member_id = Members.member_id;
-
