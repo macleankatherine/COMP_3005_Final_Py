@@ -17,43 +17,67 @@ CREATE TABLE IF NOT EXISTS Fitness_Goals(
     goal_description VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS exersize_routines(
+CREATE TABLE IF NOT EXISTS Exersize_routines(
     routine_id SERIAL PRIMARY KEY,
     member_id INT REFERENCES Members(member_id),
-    goal_name VARCHAR(255) NOT NULL,
-    goal_desciption VARCHAR(255) NOT NULL
+    routine_name VARCHAR(255) NOT NULL,
+    routine_desciption VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Trainers(
     trainer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     phone_number VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Trainer_Availability (
+    availability_id SERIAL PRIMARY KEY,
+    trainer_id INT REFERENCES Trainers(trainer_id),
+    day_of_week VARCHAR(10) NOT NULL, -- e.g., 'Monday', 'Tuesday', etc.
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Administrators(
     admin_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    username VARCHAR(255) NOT NULL,
     phone_number VARCHAR(255) NOT NULL
 );
 
-
-CREATE TABLE IF NOT EXISTS personal_training_classes(
-    session_id SERIAL PRIMARY KEY,
-    trainer_id INT REFERENCES Trainers(trainer_id),
-    member_id INT REFERENCES Members(member_id)
+CREATE TABLE IF NOT EXISTS Rooms (
+    room_id SERIAL PRIMARY KEY,
+    room_name VARCHAR(255) UNIQUE NOT NULL,
+    capacity INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS group_training_classes(
+CREATE TABLE IF NOT EXISTS Room_Bookings (
+    booking_id SERIAL PRIMARY KEY,
+    room_id INT UNIQUE REFERENCES Rooms(room_id),
+    start_datetime TIMESTAMP NOT NULL,
+    end_datetime TIMESTAMP NOT NULL,
+    recurrence VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS Personal_training_classes(
+    class_id SERIAL PRIMARY KEY,
+    trainer_id INT UNIQUE REFERENCES Trainers(trainer_id),
+    member_id INT UNIQUE REFERENCES Members(member_id),
+    booking_id INT UNIQUE REFERENCES Room_Bookings(booking_id), -- Add reference to Room_Bookings
+    details VARCHAR(255)
+);
+
+
+CREATE TABLE IF NOT EXISTS Group_training_classes(
     class_id SERIAL PRIMARY KEY,
     trainer_id INT REFERENCES Trainers(trainer_id),
     member_id INT REFERENCES Members(member_id),
-    theDay DATE NOT NULL
+    name VARCHAR(255) NOT NULL,
+    booking_id INT UNIQUE REFERENCES Room_Bookings(booking_id), -- Add reference to Room_Bookings
+    details VARCHAR(255)
 );
-
 
 CREATE TABLE IF NOT EXISTS Equipment(
     equipment_id SERIAL PRIMARY KEY,
@@ -69,11 +93,11 @@ CREATE TABLE IF NOT EXISTS Equipment_Maintentence(
     theDay DATE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS billing(
+CREATE TABLE IF NOT EXISTS Billing(
     billing_id SERIAL PRIMARY KEY,
     status BOOLEAN NOT NULL,
     amount FLOAT NOT NULL,
-    billing_session_id INT REFERENCES personal_training_classes(session_id),
+    billing_class_id INT REFERENCES personal_training_classes(class_id),
     member_id INT REFERENCES Members(member_id)
 );
 
