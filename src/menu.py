@@ -4,6 +4,7 @@ import personal_training_schedule
 import group_schedule_management
 import database
 import database_operations
+import admin
 import os
 
 def clear_terminal():
@@ -20,6 +21,8 @@ def main_menu(connection):
         print("4. Adminastrator")
         print("5. print members DEBuG")
         print("6. print members with goals DEBUG")
+        print("7. Adminastrator Resigtiation ")
+        print("8. Adminastrator Login")
 
         print("0. Exit\n")
 
@@ -37,7 +40,7 @@ def main_menu(connection):
                     if(user):
                         choice = "2"
 
-        if choice == "2":
+        elif choice == "2":
             clear_terminal()
             user = profile_management.login_member(connection)
             if(user):
@@ -45,13 +48,18 @@ def main_menu(connection):
                 member_menu(connection, user)
         # elif choice == "3":
 
-        # elif choice == "4":
-
+        elif choice == "4":  #if admin
+            clear_terminal()
+            user = admin.register_admin(connection)
+            if(user):
+                print("admin registered ")
+                 
         elif choice == "5":
             database.print_all_members(connection)
         elif choice == "6":
             database_operations.print_members_goals(connection)
 
+        
         elif choice == "0":
             clear_terminal()
             print("Bye!\n")
