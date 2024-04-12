@@ -46,6 +46,7 @@ def print_group_classes(rows):
 def schedule_group_class(connection, user):
     try:
         cursor = connection.cursor()
+        member_id = user[0]
 
         print_available_group_classes(connection)
         print("What class would you like to register for? ")
@@ -57,8 +58,8 @@ def schedule_group_class(connection, user):
                 return user
             elif not class_id.isdigit():
                 print("Please enter the id as a number. ")
-            elif(valid_group_class(connection, class_id) == None):
-                print("The id entered doesn't match any avaiable classes. ")
+            elif(valid_group_class(connection, class_id, member_id) == None):
+                continue
             else:
                 group_class = valid_group_class(connection, class_id)
                 break
@@ -80,24 +81,36 @@ def schedule_group_class(connection, user):
     finally:
         cursor.close()
 
-def valid_group_class(connection, class_id):
+def valid_group_class(connection, class_id, member_id):
     try:
         cursor = connection.cursor()
 
         cursor.execute("SELECT * FROM Group_training_classes WHERE class_id = %s", (class_id,))
         group_class = cursor.fetchone()
 
-        if(group_class):
-            return group_class
-        else: 
+        if not group_class:
+            print("Group class with the provided ID does not exist.")
             return None
+
+        # Check if the member is already registered in the class
+        cursor.execute("SELECT * FROM Group_training_class_members WHERE class_id = %s AND member_id = %s", (class_id, member_id))
+        existing_registration = cursor.fetchone()
+
+        if existing_registration:
+            print("Member is already registered in this group class.")
+            return None
+
+        # If both checks pass, return the group class details
+        return group_class
         
     except psycopg2.Error as e:
         print(f"Error executing SQL query: {e}")
         return None
     
     finally:
-        cursor.close()
+        if cursor:
+            cursor.close()
+
 
 def print_registered_group_classes(connection, user):
     try:
