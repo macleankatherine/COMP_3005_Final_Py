@@ -167,3 +167,30 @@ def print_members_goals(connection):
     finally:
         if connection:
             cursor.close()
+
+
+
+
+
+
+
+def get_admin_by_email(connection, email):
+    try:
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT * FROM Administrators WHERE email = %s", (email,))
+        user = cursor.fetchone()
+
+        if user:
+            return user
+        else:
+            print("Admin with email", email, "not found.")
+            return None
+
+    except (Exception, psycopg2.Error) as error:
+        print("Failed to find Admin by email:", error)
+        return None
+
+    finally:
+        if cursor:
+            cursor.close()
