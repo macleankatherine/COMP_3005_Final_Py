@@ -6,12 +6,14 @@ def schedule_personal_training(connection, user):
     try:
         cursor = connection.cursor()
 
-        print("Select a Trainer:")
+        print("\nSelect a Trainer:")
         print_all_trainers(connection)
 
         while True:
-            trainer_id = input("Enter the ID of the trainer you want to schedule with: ")
-            if not trainer_id.isdigit():
+            trainer_id = input("\nEnter the ID of the trainer you want to schedule with: ")
+            if trainer_id == "0":
+                return
+            elif not trainer_id.isdigit():
                 print("Please enter a number.\n")
             elif(not valid_trainer_id(connection, trainer_id)):
                 print("Please enter a valid trainer ID.\n")
@@ -21,13 +23,17 @@ def schedule_personal_training(connection, user):
         trainer_id = int(trainer_id)
 
         while True:
-            start_time = input("Enter the start time (HH:MM): ")
-            if(validate_time_input(start_time)):
-                break
-         
-        while True:
-            end_time = input("Enter the end time (HH:MM): ")
-            if(validate_time_input(end_time)):
+            while True:
+                start_time = input("Enter the start time (HH:MM): ")
+                if(validate_time_input(start_time)):
+                    break
+            
+            while True:
+                end_time = input("Enter the end time (HH:MM): ")
+                if(validate_time_input(end_time)):
+                    break
+
+            if validate_time_range(start_time, end_time):
                 break
 
         while True:
@@ -36,7 +42,6 @@ def schedule_personal_training(connection, user):
                 break
 
         if(not is_trainer_available(connection, trainer_id, day_of_week, start_time, end_time)):
-            print("Trainer isn't available at this time")
             return
             #NEXT check if the trainer has other group/personal classes at the same time
 
@@ -58,10 +63,9 @@ def schedule_personal_training(connection, user):
             RETURNING class_id
         """, (trainer_id, user[0], booking_id, details))
 
-        class_id = cursor.fetchone()[0]
         connection.commit()
 
-        print(f"Personal training session scheduled successfully! Class ID: {class_id}")
+        print(f"Personal training session scheduled successfully!")
 
     except (Exception, psycopg2.DatabaseError) as error:
         print("Failed to schedule personal training session:", error)
@@ -108,6 +112,32 @@ def validate_time_input(time_str):
         return True
     except ValueError:
         # If the input doesn't match the expected format, return False
+        print("Please match the format(HH:MM)\n")
+        return False
+    
+def validate_time_range(start_time, end_time):
+    try:
+        # Parse the time strings into datetime objects
+        start_time = datetime.strptime(start_time, "%H:%M")
+        end_time = datetime.strptime(end_time, "%H:%M")
+        
+        # Check if start time is before end time
+        if start_time >= end_time:
+            print("Start time must be before end time.\n")
+            return False
+        
+        # Calculate duration in minutes
+        duration_minutes = (end_time - start_time).total_seconds() / 60
+        
+        # Check if duration is at least 30 minutes
+        if duration_minutes < 30:
+            print("Duration must be at least 30 minutes.\n")
+            return False
+        
+        return True
+        
+    except ValueError:
+        print("Invalid time format. Please use HH:MM format.")
         return False
     
 def validate_day_of_week(day_str):
@@ -140,6 +170,7 @@ def is_trainer_available(connection, trainer_id, day_of_week, start_time, end_ti
             print("Sorry, the selected trainer is not available at that time.")
             return False
         else:
+            print("Trainer is avaiable\n")
             return True
         
     except (Exception, psycopg2.DatabaseError) as error:
@@ -204,7 +235,6 @@ def room_has_conflicts(connection, room_id, day_of_week, start_time, end_time):
         return True
 
 
-
 def book_room(connection, day_of_week, start_time, end_time):
     try:
         cursor = connection.cursor()
@@ -235,6 +265,7 @@ def book_room(connection, day_of_week, start_time, end_time):
         booking_id = cursor.fetchone()[0]
         connection.commit()
         
+        print("Successfully booked the room\n ")
         return booking_id
 
     except (psycopg2.Error, Exception) as error:
@@ -278,6 +309,8 @@ def print_all_member_personal_sessions(connection, user):
 def print_personal_training_session(rows):
     print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
             "ID", "Trainer", "Day of Week", "Start Time", "End Time", "Room", "Recurrence", "Capacity"))
+    print("-" * 130)
+
         
     for row in rows:
         class_id, trainer_name, day_of_week, start_time, end_time, room_name, recurrence, capacity, details = row
@@ -285,6 +318,69 @@ def print_personal_training_session(rows):
             class_id, trainer_name, day_of_week, start_time.strftime("%H:%M:%S"), 
             end_time.strftime("%H:%M:%S"), room_name, recurrence, capacity, details))
         
-        print("       Details: ", details , "\n")
+        print("      Details: ", details , "\n")
 
     print("\n")
+
+def cancel_personal_session(connection, user):
+    try:
+        cursor = connection.cursor()
+        member_id = user[0]
+
+        print_all_member_personal_sessions(connection, user)
+
+        while True:
+            class_id = input("Enter the Class ID of the session you want to cancel: ")
+            if class_id == "0":
+                return
+            elif class_id.isdigit():
+                class_id = int(class_id)
+                if is_registered_in_class(connection, class_id, member_id):
+                    break
+                else:
+                    print("Please enter a valid Class ID.")
+            else:
+                print("Please enter a number.")
+        
+        # Delete the personal training session entry
+        cursor.execute("DELETE FROM Personal_training_classes WHERE class_id = %s RETURNING booking_id", (class_id,))
+        booking_id = cursor.fetchone()[0]
+
+        # Delete the related room booking entry
+        cursor.execute("DELETE FROM Room_Bookings WHERE booking_id = %s", (booking_id,))
+        
+        # Commit the transaction
+        connection.commit()
+        
+        print("Personal training session canceled successfully.")
+    
+    except (psycopg2.Error, Exception) as error:
+        connection.rollback()
+        print("Error occurred while canceling personal training session:", error)
+    
+    finally:
+        if cursor:
+            cursor.close()
+
+def is_registered_in_class(connection, class_id, member_id):
+    try:
+        cursor = connection.cursor()
+        
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM Personal_training_classes
+            WHERE class_id = %s AND member_id = %s
+        """, (class_id, member_id))
+        
+        count = cursor.fetchone()[0]
+        
+        # If count is greater than 0, the member is registered in the session
+        return count > 0
+    
+    except (psycopg2.Error, Exception) as error:
+        print("Error occurred while checking registration status:", error)
+        return False
+    
+    finally:
+        if cursor:
+            cursor.close()

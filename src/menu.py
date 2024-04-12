@@ -189,8 +189,9 @@ def schedule_perseonal_training_menu(connection, user):
             # clear_terminal()
             personal_training_schedule.print_all_member_personal_sessions(connection, user)
 
-        # elif choice == "3":
-            #clear_terminal()
+        elif choice == "3":
+            # clear_terminal()
+            personal_training_schedule.cancel_personal_session(connection, user)
         elif choice == "0":
             return user
         else:

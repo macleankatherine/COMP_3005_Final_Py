@@ -30,6 +30,8 @@ def print_available_group_classes(connection):
 def print_group_classes(rows):
     print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
             "ID", "Name", "Trainer", "Day of Week", "Start Time", "End Time", "Room", "Recurrence", "Capacity"))
+    print("-" * 140)
+
         
     for row in rows:
         class_id, name, trainer_name, day_of_week, start_time, end_time, room_name, recurrence, capacity, details= row
@@ -37,7 +39,7 @@ def print_group_classes(rows):
             class_id, name, trainer_name, day_of_week, start_time.strftime("%H:%M"), 
             end_time.strftime("%H:%M"), room_name, recurrence, capacity))
         
-        print("       Details: ", details , "\n")
+        print("      Details: ", details , "\n")
 
     print("\n")
 
