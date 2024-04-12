@@ -4,8 +4,6 @@ import schedule_management
 import database
 import database_operations
 import os
-import trainersmenu
-import trainers
 
 def clear_terminal():
     os.system('cls')
@@ -44,13 +42,7 @@ def main_menu(connection):
             if(user):
                 clear_terminal()
                 member_menu(connection, user)
-
-        elif choice == "3":
-            clear_terminal()
-            trainer = trainers.trainer_login(connection)
-            if(trainer):
-                clear_terminal
-                trainersmenu.trainer_menu(connection , trainer)
+        # elif choice == "3":
 
         # elif choice == "4":
 
