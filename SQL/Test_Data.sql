@@ -24,10 +24,6 @@ VALUES
     (2, 'Tuesday', '14:00:00', '15:00:00', 'Bi-weekly'),
     (3, 'Wednesday', '10:30:00', '11:30:00', 'Monthly');
 
-    (1, 'Monday', '09:00:00', '10:00:00', 'Weekly'),
-    (2, 'Tuesday', '14:00:00', '15:00:00', 'Bi-weekly'),
-    (3, 'Wednesday', '10:30:00', '11:30:00', 'Monthly');
-
 
 INSERT INTO Group_training_classes (trainer_id, name, booking_id, details)
 VALUES
