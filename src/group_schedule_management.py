@@ -7,13 +7,14 @@ def print_available_group_classes(connection):
         
         cursor.execute("""
             SELECT gc.class_id, gc.name, t.first_name || ' ' || t.last_name AS trainer_name,
-                rb.start_datetime AS start_date, rb.end_datetime AS end_date,
-                r.room_name, rb.recurrence, r.capacity
+                rb.day_of_week, rb.start_time, rb.end_time,
+                r.room_name, rb.recurrence, r.capacity, gc.details
             FROM Group_training_classes gc
             INNER JOIN Trainers t ON gc.trainer_id = t.trainer_id
             INNER JOIN Room_Bookings rb ON gc.booking_id = rb.booking_id
             INNER JOIN Rooms r ON rb.room_id = r.room_id
         """)
+
 
         # Fetch all the results
         rows = cursor.fetchall()
@@ -22,19 +23,24 @@ def print_available_group_classes(connection):
         print_group_classes(rows)
     
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print("Error occurred while fetching available group classes:", error)
     finally:
         cursor.close()
 
 def print_group_classes(rows):
     print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
-            "ID", "Name", "Trainer", "Start Date", "End Date", "Room", "Recurrence", "Capacity"))
+            "ID", "Name", "Trainer", "Day of Week", "Start Time", "End Time", "Room", "Recurrence", "Capacity"))
+    print("-" * 140)
+
         
     for row in rows:
-        class_id, name, trainer_name, start_datetime, end_datetime, room_name, recurrence, capacity = row
+        class_id, name, trainer_name, day_of_week, start_time, end_time, room_name, recurrence, capacity, details= row
         print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
-            class_id, name, trainer_name, start_datetime.strftime("%Y-%m-%d %H:%M:%S"), 
-            end_datetime.strftime("%Y-%m-%d %H:%M:%S"), room_name, recurrence, capacity))
+            class_id, name, trainer_name, day_of_week, start_time.strftime("%H:%M"), 
+            end_time.strftime("%H:%M"), room_name, recurrence, capacity))
+        
+        print("      Details: ", details , "\n")
+
     print("\n")
 
 def schedule_group_class(connection, user):
@@ -46,15 +52,15 @@ def schedule_group_class(connection, user):
         
         while True:
             class_id = input("Enter the class ID (or '0' to quit): ")
-            group_class = valid_group_class(connection, class_id)
 
             if class_id == '0':
                 return user
             elif not class_id.isdigit():
                 print("Please enter the id as a number. ")
-            elif(valid_group_class == None):
+            elif(valid_group_class(connection, class_id) == None):
                 print("The id entered doesn't match any avaiable classes. ")
             else:
+                group_class = valid_group_class(connection, class_id)
                 break
                 
         if group_class:
@@ -100,8 +106,8 @@ def print_registered_group_classes(connection, user):
         
         cursor.execute("""
             SELECT gc.class_id, gc.name, t.first_name || ' ' || t.last_name AS trainer_name,
-                rb.start_datetime AS start_date, rb.end_datetime AS end_date,
-                r.room_name, rb.recurrence, r.capacity
+                rb.day_of_week, rb.start_time, rb.end_time,
+                r.room_name, rb.recurrence, r.capacity, gc.details
             FROM Group_training_classes gc
             INNER JOIN Trainers t ON gc.trainer_id = t.trainer_id
             INNER JOIN Room_Bookings rb ON gc.booking_id = rb.booking_id
@@ -110,6 +116,7 @@ def print_registered_group_classes(connection, user):
             WHERE gcm.member_id = %s
         """, (member_id,))
 
+
         # Fetch all the results
         rows = cursor.fetchall()
         
@@ -117,7 +124,7 @@ def print_registered_group_classes(connection, user):
         print_group_classes(rows)
     
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print("Error occurred while fetching registered group classes:", error)
     finally:
         cursor.close()
 

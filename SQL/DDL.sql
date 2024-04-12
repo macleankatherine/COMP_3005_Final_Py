@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS Room_Bookings (
 
 CREATE TABLE IF NOT EXISTS Personal_training_classes(
     class_id SERIAL PRIMARY KEY,
-    trainer_id INT UNIQUE REFERENCES Trainers(trainer_id),
-    member_id INT UNIQUE REFERENCES Members(member_id),
+    trainer_id INT REFERENCES Trainers(trainer_id),
+    member_id INT REFERENCES Members(member_id),
     booking_id INT UNIQUE REFERENCES Room_Bookings(booking_id), -- Add reference to Room_Bookings
     details VARCHAR(255)
 );

@@ -19,7 +19,13 @@ VALUES
 
 
 INSERT INTO Room_Bookings (room_id, day_of_week, start_time, end_time, recurrence)
+
+INSERT INTO Room_Bookings (room_id, day_of_week, start_time, end_time, recurrence)
 VALUES
+    (1, 'Monday', '09:00:00', '10:00:00', 'Weekly'),
+    (2, 'Tuesday', '14:00:00', '15:00:00', 'Bi-weekly'),
+    (3, 'Wednesday', '10:30:00', '11:30:00', 'Monthly');
+
     (1, 'Monday', '09:00:00', '10:00:00', 'Weekly'),
     (2, 'Tuesday', '14:00:00', '15:00:00', 'Bi-weekly'),
     (3, 'Wednesday', '10:30:00', '11:30:00', 'Monthly');
@@ -36,6 +42,17 @@ VALUES
     (1, 1), -- Yoga Class with member_id 1
     (2, 2), -- HIIT Workout with member_id 2
     (3, 3); -- Zumba Dance Party with member_id 3
+
+INSERT INTO Trainer_Availability (trainer_id, day_of_week, start_time, end_time) VALUES
+    (1, 'Monday', '08:00', '22:00'),
+    (1, 'Tuesday', '08:00', '22:00'),
+    (1, 'Wednesday', '08:00', '22:00'),
+    (1, 'Thursday', '08:00', '22:00'),
+    (1, 'Friday', '08:00', '22:00'),
+    (1, 'Saturday', '08:00', '22:00'),
+    (1, 'Sunday', '08:00', '22:00'),
+    (2, 'Tuesday', '13:00', '17:00'),
+    (3, 'Friday', '11:00', '15:00');
 
 INSERT INTO Trainer_Availability (trainer_id, day_of_week, start_time, end_time) VALUES
     (1, 'Monday', '08:00', '22:00'),

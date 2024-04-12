@@ -1,6 +1,7 @@
 import registration
 import profile_management
-import schedule_management
+import personal_training_schedule
+import group_schedule_management
 import database
 import database_operations
 import os
@@ -74,8 +75,9 @@ def member_menu(connection, user):
 
         if choice == "1":
             clear_terminal()
-        # elif choice == "2":
+        elif choice == "2":
         #     clear_terminal()
+            user = schedule_perseonal_training_menu(connection, user)
         elif choice == "3":
             user = schedule_group_menu(connection, user)
         elif choice == "4":
@@ -155,15 +157,41 @@ def schedule_group_menu(connection, user):
 
         if choice == "1":
             #clear_terminal()
-            user = schedule_management.schedule_group_class(connection, user)
+            user = group_schedule_management.schedule_group_class(connection, user)
 
         elif choice == "2":
             #clear_terminal()
-            schedule_management.print_registered_group_classes(connection, user)
+            group_schedule_management.print_registered_group_classes(connection, user)
 
         elif choice == "3":
             #clear_terminal()
-            user = schedule_management.drop_group_class(connection, user)
+            user = group_schedule_management.drop_group_class(connection, user)
+        elif choice == "0":
+            return user
+        else:
+            print("Invalid choice. Please try again.")
+
+def schedule_perseonal_training_menu(connection, user):
+    while True:
+        print("Select what you would like to do. \n")
+        print("1. Schedule a personal training session ")
+        print("2. View personal training sessions ")
+        print("3. Cancel a session ")
+        print("0. Go Back ")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            #clear_terminal()
+            personal_training_schedule.schedule_personal_training(connection, user)
+
+        elif choice == "2":
+            # clear_terminal()
+            personal_training_schedule.print_all_member_personal_sessions(connection, user)
+
+        elif choice == "3":
+            # clear_terminal()
+            personal_training_schedule.cancel_personal_session(connection, user)
         elif choice == "0":
             return user
         else:
