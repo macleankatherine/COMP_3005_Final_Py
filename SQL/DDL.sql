@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS Administrators(
     admin_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(255) NOT NULL
+    phone_number VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Rooms (
@@ -87,15 +88,16 @@ CREATE TABLE IF NOT EXISTS Group_training_class_members (
 CREATE TABLE IF NOT EXISTS Equipment(
     equipment_id SERIAL PRIMARY KEY,
     equipment_name VARCHAR(255) NOT NULL,
-    equipment_description VARCHAR(255) NOT NULL
+    equipment_description VARCHAR(255) NOT NULL,
+    room_id INT REFERENCES Room(room_id),
 );
 
 CREATE TABLE IF NOT EXISTS Equipment_Maintentence(
-    class_id SERIAL PRIMARY KEY,
-    responsible_admin_id INT REFERENCES Administrators(admin_id),
-    equipment_name VARCHAR(255) NOT NULL,
+    request_id SERIAL PRIMARY KEY,
+    request_name VARCHAR(255) NOT NULL,
+    request_details VARCHAR(255) NOT NULL,
     equipment_id INT REFERENCES Equipment(equipment_id),
-    theDay DATE NOT NULL
+    request_date DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Billing(
