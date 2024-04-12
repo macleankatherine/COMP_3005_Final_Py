@@ -1,5 +1,6 @@
 import psycopg2
 import database_operations
+import dashboard
 
 def login_member(connection):
     try:
@@ -119,8 +120,8 @@ def update_member_personal_info(connection, user):
         
 #Validation Helper functions
 def valid_name(name):
-    if len(name) < 2:
-        print("Names must be at least 2 characters long.\n")
+    if len(name) < 2 or len(name) > 20:
+        print("Names must be at 2-20 characters long.\n")
         return False
     elif not name.isalpha():
         print("Names can only contain characters.\n")
@@ -132,8 +133,8 @@ def valid_email(connection, email):
     if "@" not in email:
         print("Email must contain '@'.\n")
         return False
-    elif len(email) < 2:
-        print("Emails must be at least 2 characters long.\n")
+    elif len(email) < 2 or len(email) > 30:
+        print("Emails must be 2-30 characters long.\n")
         return False
     elif(database_operations.is_email_in_database(connection, email)):
         print("Email is already in use.\n")
@@ -165,7 +166,7 @@ def update_weight(connection, user):
         user_id = user[0]
 
         while True:
-            weight = input("\nEnter weight ("+ weight_unit + "): ")
+            weight = input("Enter weight ("+ weight_unit + "): ")
 
             if(weight == "0"):
                 return None
@@ -181,8 +182,8 @@ def update_weight(connection, user):
 
             elif not weight.isdigit():
                 print("Weight can contain only have digits.\n")
-            elif len(weight) < 2:
-                print("Weight must be at least 2 characters long.\n")
+            elif len(weight) < 2 or len(weight) > 5:
+                print("Weight must be 2-5 characters long.\n")
             else:
                 weight += weight_unit
                 try:
@@ -315,8 +316,8 @@ def valid_goal():
 
             if(details == "0"):
                 return None
-            elif(len(details) > 115 or len(details) < 10):
-                print("Goal Description can only be between 10-115 characters")
+            elif(len(details) > 105 or len(details) < 10):
+                print("Goal Description can only be between 10-105 characters")
             else:
                 return name, details
 
@@ -326,10 +327,10 @@ def update_goal(connection, user):
         print("What are fitness goals would you like to update?")
         print("Include anything will help your trainer create a personalized experience.\n")
         member_id = user[0]
-        database_operations.print_fitness_goals(connection, member_id)
+        dashboard.print_fitness_goals(connection, member_id)
 
         while True:
-            choice = input("What goal would you like to update?  ")
+            choice = input("\nWhat goal would you like to update?  ")
             if(choice == "0"):
                 return user
             elif(not choice.isdigit()):
@@ -340,18 +341,18 @@ def update_goal(connection, user):
                 print("\nEnter a valid option ")
 
         while True:
-            name, details = valid_goal(user)
-            if(name is None or details is None):
-                print(user)
+            goals_info = valid_goal()
+            if(goals_info is None):
                 return user
-
+            
+            name, details = goals_info
             cursor.execute("UPDATE Fitness_Goals SET goal_name = %s, goal_description = %s WHERE goal_id = %s",
                 (name, details, choice))
 
             connection.commit()
 
-            print("\n1.Update another health goal. ")
-            print("0. Back. ")
+            print("\n1. Update another health goal ")
+            print("0. Back ")
             cont = input("Enter your choice:  ")
             if(cont == "0"):
                 return user

@@ -56,7 +56,7 @@ def schedule_group_class(connection, user):
             if class_id == '0':
                 return user
             elif not class_id.isdigit():
-                print("Please enter the id as a number. ")
+                print("Please enter the id as a number. \n")
             elif(valid_group_class(connection, class_id, member_id) == None):
                 continue
             else:
@@ -88,7 +88,7 @@ def valid_group_class(connection, class_id, member_id):
         group_class = cursor.fetchone()
 
         if not group_class:
-            print("Group class with the provided ID does not exist.")
+            print("Group class with the provided ID does not exist.\n")
             return None
 
         # Check if the member is already registered in the class
@@ -96,7 +96,7 @@ def valid_group_class(connection, class_id, member_id):
         existing_registration = cursor.fetchone()
 
         if existing_registration:
-            print("Member is already registered in this group class.")
+            print("Member is already registered in this group class.\n")
             return None
 
         # If both checks pass, return the group class details
@@ -132,9 +132,9 @@ def print_registered_group_classes(connection, user):
         # Fetch all the results
         rows = cursor.fetchall()
         
-        print("\nRegistered Group Classes:")
+        print("Registered Group Classes:")
         print_group_classes(rows)
-    
+
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error occurred while fetching registered group classes:", error)
     finally:

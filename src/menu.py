@@ -2,6 +2,7 @@ import registration
 import profile_management
 import personal_training_schedule
 import group_schedule_management
+import manage_fitness_achievements
 import database
 import database_operations
 import dashboard
@@ -13,7 +14,7 @@ def clear_terminal():
 
 def main_menu(connection):
     while True:
-        #clear_terminal()
+        clear_terminal()
         print("\nWelcome to Fitness App!\n")
         print("Who are you?")
         print("1. New User")
@@ -21,10 +22,8 @@ def main_menu(connection):
         print("3. Trainer ")
         print("4. Adminastrator")
         print("5. print members DEBuG")
-        print("6. print members with goals DEBUG")
         print("7. Adminastrator Resigtiation ")
         print("8. Adminastrator Login")
-
         print("0. Exit\n")
 
         choice = input("Enter your choice: ")
@@ -33,10 +32,10 @@ def main_menu(connection):
             clear_terminal()
             user = registration.register_member(connection)
             if(user):
-                #clear_terminal()
+                clear_terminal()
                 user = registration.register_health_metrics(connection, user)
                 if(user):
-                    #clear_terminal()
+                    clear_terminal()
                     user = registration.register_health_goal(connection, user)
                     if(user):
                         choice = "2"
@@ -57,9 +56,6 @@ def main_menu(connection):
                  
         elif choice == "5":
             database.print_all_members(connection)
-        elif choice == "6":
-            database_operations.print_members_goals(connection)
-
         
         elif choice == "0":
             clear_terminal()
@@ -70,30 +66,34 @@ def main_menu(connection):
 
 def member_menu(connection, user):
      while True:
+        clear_terminal()
         print("Hello", user[1])
         print("Welcome Back!\n")
         print("1. Display Dashboard")
         print("2. Manage Personal Training")
         print("3. Manage Group Training")
-        print("4. Update Member Information")
-        print("5. print fitness goals DEBUG")
+        print("4. Manage Health Achievements")
+        print("5. Update Member Information")
         print("6. print members DEBUG")
-        print("0. Exit\n")
+        print("0. Log out\n")
 
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            # clear_terminal()
+            clear_terminal()
             dashboard.display_dashboard(connection, user)
         elif choice == "2":
-        #     clear_terminal()
-            user = schedule_personal_training_menu(connection, user)
+            clear_terminal()
+            schedule_personal_training_menu(connection, user)
         elif choice == "3":
-            user = schedule_group_menu(connection, user)
+            clear_terminal()
+            schedule_group_menu(connection, user)
         elif choice == "4":
-            user = update_member_menu(connection, user)
+            clear_terminal()
+            manage_fitness_achievements_menu(connection, user)
         elif choice == "5":
-            database_operations.print_fitness_goals(connection, user[0])
+            clear_terminal()
+            user = update_member_menu(connection, user)
         elif choice == "6":
             database_operations.print_member(connection, user[0])
         elif choice == "0":
@@ -103,11 +103,12 @@ def member_menu(connection, user):
 
 def update_member_menu(connection, user):
     while True:
+        clear_terminal()
         print("What would you like to update", user[1])
         print("1. Personal Information")
         print("2. Health Metrics")
         print("3. Health Goals")
-        print("0. Exit\n")
+        print("0. Go Back\n")
 
         choice = input("Enter your choice: ")
 
@@ -131,15 +132,17 @@ def update_member_menu(connection, user):
 
 def update_member_metric_menu(connection, user):
     while True:
+        clear_terminal()
         print("Select what metric you would like to update. \n")
-        print("1. Weight: " + user[6])
-        print("2. Height: "+ user[7])
-        print("3. Body Fat %: "+ user[8])
+        print("1. Weight: " + (user[6] if user[6] is not None else " "))
+        print("2. Height: "+ (user[7] if user[7] is not None else " "))
+        print("3. Body Fat %: "+ (user[8] if user[8] is not None else " "))
+        print("0. Go Back")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
 
         if choice == "1":
-            #clear_terminal()
+            clear_terminal()
             user = profile_management.update_weight(connection, user)
 
         elif choice == "2":
@@ -157,6 +160,7 @@ def update_member_metric_menu(connection, user):
 
 def schedule_group_menu(connection, user):
     while True:
+        clear_terminal()
         print("Select what you would like to do. \n")
         print("1. Enroll in Group class ")
         print("2. View enrolled classes ")
@@ -166,15 +170,19 @@ def schedule_group_menu(connection, user):
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            #clear_terminal()
+            clear_terminal()
             user = group_schedule_management.schedule_group_class(connection, user)
 
         elif choice == "2":
-            #clear_terminal()
-            group_schedule_management.print_registered_group_classes(connection, user)
+            clear_terminal()
+            while True:
+                group_schedule_management.print_registered_group_classes(connection, user)
+                exit = input("\nPress 0 to exit: ")
+                if(exit == "0"):
+                    break
 
         elif choice == "3":
-            #clear_terminal()
+            clear_terminal()
             user = group_schedule_management.drop_group_class(connection, user)
         elif choice == "0":
             return user
@@ -183,25 +191,51 @@ def schedule_group_menu(connection, user):
 
 def schedule_personal_training_menu(connection, user):
     while True:
+        clear_terminal()
         print("Select what you would like to do. \n")
         print("1. Schedule a personal training session ")
         print("2. View personal training sessions ")
         print("3. Cancel a session ")
         print("0. Go Back ")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
 
         if choice == "1":
-            #clear_terminal()
+            clear_terminal()
             personal_training_schedule.schedule_personal_training(connection, user)
 
         elif choice == "2":
-            # clear_terminal()
-            personal_training_schedule.print_all_member_personal_sessions(connection, user)
+            clear_terminal()
+            while True:
+                personal_training_schedule.print_all_member_personal_sessions(connection, user)
+                exit = input("\nPress 0 to exit: ")
+                if(exit == "0"):
+                    break
 
         elif choice == "3":
-            # clear_terminal()
+            clear_terminal()
             personal_training_schedule.cancel_personal_session(connection, user)
+        elif choice == "0":
+            return user
+        else:
+            print("Invalid choice. Please try again.")
+
+def manage_fitness_achievements_menu(connection, user):
+    while True:
+        clear_terminal()
+        print("Select what you would like to do. \n")
+        print("1. Add new fitness Achievement!")
+        print("2. Delete Fitness Achievement ")
+        print("0. Go Back ")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            clear_terminal()
+            manage_fitness_achievements.add_achievement(connection, user)
+        elif choice == "2":
+            clear_terminal()
+            manage_fitness_achievements.delete_achievement(connection, user)
         elif choice == "0":
             return user
         else:
