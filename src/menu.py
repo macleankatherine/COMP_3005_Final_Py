@@ -4,6 +4,7 @@ import personal_training_schedule
 import group_schedule_management
 import database
 import database_operations
+import dashboard
 import admin
 import os
 
@@ -82,10 +83,11 @@ def member_menu(connection, user):
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            clear_terminal()
+            # clear_terminal()
+            dashboard.display_dashboard(connection, user)
         elif choice == "2":
         #     clear_terminal()
-            user = schedule_perseonal_training_menu(connection, user)
+            user = schedule_personal_training_menu(connection, user)
         elif choice == "3":
             user = schedule_group_menu(connection, user)
         elif choice == "4":
@@ -179,7 +181,7 @@ def schedule_group_menu(connection, user):
         else:
             print("Invalid choice. Please try again.")
 
-def schedule_perseonal_training_menu(connection, user):
+def schedule_personal_training_menu(connection, user):
     while True:
         print("Select what you would like to do. \n")
         print("1. Schedule a personal training session ")

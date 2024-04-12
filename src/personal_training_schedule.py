@@ -318,9 +318,8 @@ def print_personal_training_session(rows):
             class_id, trainer_name, day_of_week, start_time.strftime("%H:%M:%S"), 
             end_time.strftime("%H:%M:%S"), room_name, recurrence, capacity, details))
         
-        print("      Details: ", details , "\n")
+        print("{:<5}{:<10}{:<115}\n".format(""," Details: ", details))
 
-    print("\n")
 
 def cancel_personal_session(connection, user):
     try:

@@ -28,20 +28,19 @@ def print_available_group_classes(connection):
         cursor.close()
 
 def print_group_classes(rows):
-    print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
+    print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<10} {:<10}".format(
             "ID", "Name", "Trainer", "Day of Week", "Start Time", "End Time", "Room", "Recurrence", "Capacity"))
-    print("-" * 140)
+    print("-" * 130)
 
         
     for row in rows:
         class_id, name, trainer_name, day_of_week, start_time, end_time, room_name, recurrence, capacity, details= row
-        print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
+        print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<10} {:<10}".format(
             class_id, name, trainer_name, day_of_week, start_time.strftime("%H:%M"), 
             end_time.strftime("%H:%M"), room_name, recurrence, capacity))
         
-        print("      Details: ", details , "\n")
+        print("{:<5}{:<10}{:<115}\n".format(""," Details: ", details))
 
-    print("\n")
 
 def schedule_group_class(connection, user):
     try:
@@ -61,7 +60,7 @@ def schedule_group_class(connection, user):
             elif(valid_group_class(connection, class_id, member_id) == None):
                 continue
             else:
-                group_class = valid_group_class(connection, class_id)
+                group_class = valid_group_class(connection, class_id, member_id)
                 break
                 
         if group_class:
@@ -133,7 +132,7 @@ def print_registered_group_classes(connection, user):
         # Fetch all the results
         rows = cursor.fetchall()
         
-        print("\nRegistered Classes:")
+        print("\nRegistered Group Classes:")
         print_group_classes(rows)
     
     except (Exception, psycopg2.DatabaseError) as error:

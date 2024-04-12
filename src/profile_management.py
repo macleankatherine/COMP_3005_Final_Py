@@ -315,8 +315,8 @@ def valid_goal():
 
             if(details == "0"):
                 return None
-            elif(len(details) > 200 or len(details) < 10):
-                print("Goal Description can only be between 10-200 characters")
+            elif(len(details) > 115 or len(details) < 10):
+                print("Goal Description can only be between 10-115 characters")
             else:
                 return name, details
 
