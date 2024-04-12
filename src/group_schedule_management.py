@@ -8,12 +8,13 @@ def print_available_group_classes(connection):
         cursor.execute("""
             SELECT gc.class_id, gc.name, t.first_name || ' ' || t.last_name AS trainer_name,
                 rb.day_of_week, rb.start_time, rb.end_time,
-                r.room_name, rb.recurrence, r.capacity
+                r.room_name, rb.recurrence, r.capacity, gc.details
             FROM Group_training_classes gc
             INNER JOIN Trainers t ON gc.trainer_id = t.trainer_id
             INNER JOIN Room_Bookings rb ON gc.booking_id = rb.booking_id
             INNER JOIN Rooms r ON rb.room_id = r.room_id
         """)
+
 
         # Fetch all the results
         rows = cursor.fetchall()
@@ -31,10 +32,13 @@ def print_group_classes(rows):
             "ID", "Name", "Trainer", "Day of Week", "Start Time", "End Time", "Room", "Recurrence", "Capacity"))
         
     for row in rows:
-        class_id, name, trainer_name, day_of_week, start_time, end_time, room_name, recurrence, capacity = row
+        class_id, name, trainer_name, day_of_week, start_time, end_time, room_name, recurrence, capacity, details= row
         print("{:<5} {:<20} {:<20} {:<20} {:<20} {:<15} {:<15} {:<10}".format(
             class_id, name, trainer_name, day_of_week, start_time.strftime("%H:%M"), 
             end_time.strftime("%H:%M"), room_name, recurrence, capacity))
+        
+        print("       Details: ", details , "\n")
+
     print("\n")
 
 def schedule_group_class(connection, user):
@@ -101,7 +105,7 @@ def print_registered_group_classes(connection, user):
         cursor.execute("""
             SELECT gc.class_id, gc.name, t.first_name || ' ' || t.last_name AS trainer_name,
                 rb.day_of_week, rb.start_time, rb.end_time,
-                r.room_name, rb.recurrence, r.capacity
+                r.room_name, rb.recurrence, r.capacity, gc.details
             FROM Group_training_classes gc
             INNER JOIN Trainers t ON gc.trainer_id = t.trainer_id
             INNER JOIN Room_Bookings rb ON gc.booking_id = rb.booking_id
@@ -109,6 +113,7 @@ def print_registered_group_classes(connection, user):
             INNER JOIN Group_training_class_members gcm ON gc.class_id = gcm.class_id
             WHERE gcm.member_id = %s
         """, (member_id,))
+
 
         # Fetch all the results
         rows = cursor.fetchall()
