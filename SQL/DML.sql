@@ -73,3 +73,21 @@ INSERT INTO exercise_routines (member_id, routine_name, routine_description) VAL
 INSERT INTO Administrators (first_name, last_name, phone_number, password) 
 VALUES ('Root', 'Admin', 'YourPhoneNumber', 'password');
 
+
+INSERT INTO Equipment (equipment_name, equipment_description, room_id) 
+VALUES
+    ('Treadmill', 'Cardio equipment', 1),
+    ('Dumbbells', 'Weight training equipment', 2),
+    ('Yoga Mats', 'Equipment for yoga classes', 3);
+
+INSERT INTO equipment_maintentence (request_name, request_details, equipment_id, request_date) 
+VALUES
+    ('Treadmill Maintenance', 'Routine maintenance check', 1, '2024-04-13'),
+    ('Dumbbells Repair', 'Replace damaged dumbbells', 2, '2024-04-15'),
+    ('Yoga Mats Cleaning', 'Deep cleaning and sanitation', 3, '2024-04-20');
+
+INSERT INTO Billing (status, amount, billing_room_id, billing_session_id, member_id) 
+VALUES
+    (FALSE, 50.00, 2, 2, 2),
+    (TRUE, 25.00, 1, 1, 1);
+
