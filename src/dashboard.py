@@ -57,7 +57,7 @@ def print_fitness_goals(connection, member_id):
             print("-" * 130)
     
             for goal in goals:
-                print("{:<5} {:<20} {:<50}".format(goal[0], goal[2], goal[3]))
+                print("{:<5} {:<20} {:<50}".format(goal[0], goal[2], goal[3]), end='')  # Remove newline here
         else:
             print("No fitness goals found for this member.")
 

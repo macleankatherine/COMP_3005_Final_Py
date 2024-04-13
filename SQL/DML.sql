@@ -70,3 +70,6 @@ INSERT INTO exercise_routines (member_id, routine_name, routine_description) VAL
     (2, 'Bodyweight Circuit', 'Bodyweight Circuit: Push-ups: 3*15, Squats: 4*12, Lunges: 3*each leg'),
     (3, 'Flexibility Routine', 'Flexibility Routine: Hamstring Stretch: 3*30s, Shoulder Stretch: 3*each side');
 
+INSERT INTO Administrators (first_name, last_name, phone_number, password) 
+VALUES ('Root', 'Admin', 'YourPhoneNumber', 'password');
+

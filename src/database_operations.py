@@ -96,7 +96,6 @@ def print_member(connection, member_id):
             if member[8]:
                 print(f"Body Fat Percentage: {member[8]}")
             print("-" * 30)
-            print("\n")
         else:
             print("Member not found.")
 

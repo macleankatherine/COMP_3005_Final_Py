@@ -328,9 +328,10 @@ def update_goal(connection, user):
         print("Include anything will help your trainer create a personalized experience.\n")
         member_id = user[0]
         dashboard.print_fitness_goals(connection, member_id)
-
+        print("\n")
+        
         while True:
-            choice = input("\nWhat goal would you like to update?  ")
+            choice = input("What goal would you like to update?  ")
             if(choice == "0"):
                 return user
             elif(not choice.isdigit()):
