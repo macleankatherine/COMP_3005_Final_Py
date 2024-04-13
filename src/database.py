@@ -6,7 +6,7 @@ def connect_to_db():
     try:
         connection = psycopg2.connect(
             user="postgres",
-            password="simon",
+            password="urbA493s",
             host="localhost",
             port="5432",
             database="final"
@@ -49,9 +49,6 @@ def print_all_members(connection):
     finally:
         if connection:
             cursor.close()
-
-
-
 
 def delete_all_members(connection):
     try:

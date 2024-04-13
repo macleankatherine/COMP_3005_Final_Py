@@ -21,28 +21,28 @@ def schedule_personal_training(connection, user):
                 break
 
         trainer_id = int(trainer_id)
-
         while True:
             while True:
-                start_time = input("Enter the start time (HH:MM): ")
-                if(validate_time_input(start_time)):
+                while True:
+                    start_time = input("Enter the start time (HH:MM): ")
+                    if(validate_time_input(start_time)):
+                        break
+                
+                while True:
+                    end_time = input("Enter the end time (HH:MM): ")
+                    if(validate_time_input(end_time)):
+                        break
+
+                if validate_time_range(start_time, end_time):
                     break
-            
+
             while True:
-                end_time = input("Enter the end time (HH:MM): ")
-                if(validate_time_input(end_time)):
+                day_of_week = input("Enter day of the week: ")
+                if(validate_day_of_week(day_of_week)):
                     break
 
-            if validate_time_range(start_time, end_time):
+            if(is_trainer_available(connection, trainer_id, day_of_week, start_time, end_time)):
                 break
-
-        while True:
-            day_of_week = input("Enter day of the week: ")
-            if(validate_day_of_week(day_of_week)):
-                break
-
-        if(not is_trainer_available(connection, trainer_id, day_of_week, start_time, end_time)):
-            return
             #NEXT check if the trainer has other group/personal classes at the same time
 
         while True:
@@ -52,8 +52,8 @@ def schedule_personal_training(connection, user):
         
         while True:
             details = input("Enter any additional details for the session: ")
-            if(len(details) > 200):
-                print("Session detail can only be 200 characters max")
+            if(len(details) > 115):
+                print("Session detail can only be 115 characters max")
             else:
                 break
 
@@ -179,10 +179,9 @@ def is_trainer_available(connection, trainer_id, day_of_week, start_time, end_ti
         available = cursor.fetchone()[0]
 
         if available == 0:
-            print("Sorry, the selected trainer is not available at that time.")
+            print("Sorry, the selected trainer is not available at that time.\n")
             return False
         else:
-            print("Trainer is avaiable\n")
             return True
         
     except (Exception, psycopg2.DatabaseError) as error:
@@ -251,7 +250,7 @@ def book_room(connection, day_of_week, start_time, end_time):
     try:
         cursor = connection.cursor()
 
-        print("Select a Room:")
+        print("\nSelect a Room:")
         print_rooms(connection)
         
         while True:
@@ -277,7 +276,6 @@ def book_room(connection, day_of_week, start_time, end_time):
         booking_id = cursor.fetchone()[0]
         connection.commit()
         
-        print("Successfully booked the room\n ")
         return booking_id
 
     except (psycopg2.Error, Exception) as error:
@@ -330,9 +328,8 @@ def print_personal_training_session(rows):
             class_id, trainer_name, day_of_week, start_time.strftime("%H:%M:%S"), 
             end_time.strftime("%H:%M:%S"), room_name, recurrence, capacity, details))
         
-        print("      Details: ", details , "\n")
+        print("{:<5}{:<10}{:<115}\n".format(""," Details: ", details))
 
-    print("\n")
 
 def cancel_personal_session(connection, user):
     try:
