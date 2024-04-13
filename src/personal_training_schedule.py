@@ -64,8 +64,20 @@ def schedule_personal_training(connection, user):
         """, (trainer_id, user[0], booking_id, details))
 
         connection.commit()
+        #NOW WE GENERATE A BILL
+        amount = calculate_personal_session_price(calculate_minutes_difference(start_time,end_time))
+       
+        cursor.execute(""" 
+            INSERT INTO Billing (status, amount, billing_room_id, billing_session_id, member_id)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (False, amount, booking_id, cursor.fetchone()[0], user[0]))
+
+        connection.commit()
+    
 
         print(f"Personal training session scheduled successfully!")
+        print(f"And a bill has been added to your account!")
+
 
     except (Exception, psycopg2.DatabaseError) as error:
         print("Failed to schedule personal training session:", error)
@@ -384,3 +396,18 @@ def is_registered_in_class(connection, class_id, member_id):
     finally:
         if cursor:
             cursor.close()
+
+
+def calculate_minutes_difference(start_time, end_time):
+    start_hours, start_minutes = map(int, start_time.split(':'))
+    end_hours, end_minutes = map(int, end_time.split(':'))
+
+    start_minutes_total = start_hours * 60 + start_minutes
+    end_minutes_total = end_hours * 60 + end_minutes
+
+    return end_minutes_total - start_minutes_total
+
+def calculate_personal_session_price(minutes):
+    """This funciton takes in a int number of minutes as the paramater,
+      and outputs a float price for personal training sessions to later create a bill"""
+    return (minutes * 0.50) #current price is 30$ / hour
