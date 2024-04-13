@@ -13,10 +13,13 @@ def trainer_login(connection):
         while True:
             trainer = None
 
-            trainerName = input("\nTrainer Name: ")
+            trainerId = input("\nTrainer ID: ")
+            if not trainerId.isdigit():
+                print("Trainer ID must be a digit.")
+                continue
             trainerPassword = input("Password: ")
 
-            cursor.execute("SELECT * FROM Trainers WHERE first_name = %s AND password = %s", (trainerName, trainerPassword))
+            cursor.execute("SELECT * FROM Trainers WHERE trainer_id = %s AND password = %s", (trainerId , trainerPassword))
             trainer = cursor.fetchone()
 
             if trainer:

@@ -23,10 +23,7 @@ def main_menu(connection):
         print("1. New User")
         print("2. Returning Member")
         print("3. Trainer ")
-        print("4. Adminastrator")
-        print("5. print members DEBuG")
-        print("6. print members with goals DEBUG")
-
+        print("4. Administrator")
         print("0. Exit\n")
 
         choice = input("Enter your choice: ")
@@ -43,7 +40,7 @@ def main_menu(connection):
                     if(user):
                         choice = "2"
 
-        elif choice == "2":
+        if choice == "2":
             clear_terminal()
             user = profile_management.login_member(connection)
             if(user):
@@ -57,7 +54,7 @@ def main_menu(connection):
                 clear_terminal
                 trainers_menu.trainer_menu(connection , trainer)
 
-        elif choice == "4":  #if admin
+        elif choice == "4":  
             clear_terminal()
             administrator = admin.login_admin(connection)
             if administrator:
@@ -69,6 +66,7 @@ def main_menu(connection):
         elif choice == "6":
             database_operations.print_members_goals(connection)
 
+            user = admin_menu.admin_login_menu(connection)
         
         elif choice == "0":
             clear_terminal()
@@ -87,7 +85,6 @@ def member_menu(connection, user):
         print("3. Manage Group Training")
         print("4. Manage Health Achievements")
         print("5. Update Member Information")
-        print("6. print members DEBUG")
         print("0. Log out\n")
 
         choice = input("Enter your choice: ")
@@ -107,8 +104,7 @@ def member_menu(connection, user):
         elif choice == "5":
             clear_terminal()
             user = update_member_menu(connection, user)
-        elif choice == "6":
-            database_operations.print_member(connection, user[0])
+
         elif choice == "0":
             break
         else:
@@ -118,6 +114,7 @@ def update_member_menu(connection, user):
     while True:
         clear_terminal()
         print("What would you like to update", user[1])
+        database_operations.print_member(connection, user[0])
         print("1. Personal Information")
         print("2. Health Metrics")
         print("3. Health Goals")
