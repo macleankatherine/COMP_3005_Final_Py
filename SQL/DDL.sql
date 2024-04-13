@@ -111,6 +111,6 @@ CREATE TABLE IF NOT EXISTS Billing(
     billing_id SERIAL PRIMARY KEY,
     status BOOLEAN NOT NULL,
     amount FLOAT NOT NULL,
-    billing_class_id INT REFERENCES personal_training_classes(class_id),
+    billing_room_id INT REFERENCES room_bookings(booking_id),
     member_id INT REFERENCES Members(member_id)
 );
