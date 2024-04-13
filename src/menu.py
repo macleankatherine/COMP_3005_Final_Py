@@ -50,9 +50,7 @@ def main_menu(connection):
 
         elif choice == "4":  #if admin
             clear_terminal()
-            user = admin.register_admin(connection)
-            if(user):
-                print("admin registered ")
+            user = admin_login_menu(connection)
                  
         elif choice == "5":
             database.print_all_members(connection)
@@ -216,32 +214,33 @@ def schedule_perseonal_training_menu(connection, user):
 
 
 
-        
+        # -- ADMIN MENU UNDER HERE ------------
 
-# def admin_login_menu(connection, user):
-#      while True:
-#         print("Hello Admin", user[1])
-#         print("1. Register as Admin")
-#         print("2. Login as admin")
-        
-#         if choice == "1":
-#                 user = admin.register_member(connection)
-#                 if(user):
-#                     print("New Admin registered Successfully ") #redicrect to next menu funciton
-#         elif choice == "2":
-#                 user = admin.login_admin(connection)
-#                 if(user):
-#                     print("Admin Successfully Logged in") #redicrect to next menu funciton
-    
-#         choice = input("Enter your choice: ")
 
-#         if choice == "1":
-#             clear_terminal()
-#         # elif choice == "2":
-#         #     clear_terminal()
+def admin_login_menu(connection):
+     while True:
+
+        print("\nHello Admin")
+        print("1. Register as Admin")
+        print("2. Login as Admin")
+        print("0. Go back\n")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+                user = admin.register_admin(connection)
+                if(user):
+                    print("New Admin registered Successfully ") #redicrect to next menu funciton
+        elif choice == "2":
+                user = admin.login_admin(connection)
+                if(user):
+                    print("Admin Successfully Logged in") #redicrect to next menu funciton
+                    admin_menu (user)
+        elif choice == "0":
+            return None
+
  
  
-# -- ADMIN MENU UNDER HERE
 
 
 def admin_menu(connection, user):
@@ -258,13 +257,23 @@ def admin_menu(connection, user):
         choice = input("Enter your choice: ")
 
         if choice == "1":
+            clear_terminal()
             user = admin_maintenence_menu(connection,user)
         elif choice == "2":
+            clear_terminal()
             user = admin_room_menu(connection,user)
         elif choice == "3":
+            clear_terminal()
             user = admin_class_management_menu(connection,user)
         elif choice == "4":
+            clear_terminal()
             user = admin_billing_management_menu(connection,user)
+        elif choice == "5":
+            clear_terminal()
+            user = admin_trainer_management_menu(connection,user)
+        elif choice == "6":
+            clear_terminal()
+            user = admin_admin_management_menu(connection,user)
         elif choice == "0":# go back to privious menu
             return user
         else:
@@ -352,25 +361,6 @@ def admin_class_management_menu(connection, user):
 
 
 
-def admin_trainer_management_menu(connection, user):
-     
-    #this admin sub menu runs a loop for maintenence promtps until exited 
-     while True:
-        print("\n \t Class Management Page!")
-        print("1. Add new trainer")
-        print("2. Delete trainer")
-        print("0. Go back")
-
-
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            print("do somehting")
-        elif choice == "0":
-            return user
-        else:
-            print("Invalid choice. Please try again.")
-
-
 
 def admin_billing_management_menu(connection, user):
      
@@ -401,6 +391,57 @@ def admin_billing_management_menu(connection, user):
             admin.delete_bill(connection)
         elif choice == "6":
             admin.alter_billing(connection)
+        elif choice == "0":
+            return user
+        else:
+            print("Invalid choice. Please try again.")
+
+def admin_trainer_management_menu(connection, user):
+     
+    #this admin sub menu runs a loop for maintenence promtps until exited 
+     while True:
+        print("\n \t Class Management Page!")
+        print("1. Add trainer")
+        print("2. Delete Trainer")
+        print("3. View all Trainers")
+        print("0. Go back")
+
+
+
+
+
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            admin.create_new_trainer(connection)
+        elif choice == "2":
+            admin.delete_trainer(connection)
+        elif choice == "3":
+            personal_training_schedule.print_all_trainers(connection)
+       
+        elif choice == "0":
+            return user
+        else:
+            print("Invalid choice. Please try again.")
+
+def admin_admin_management_menu(connection, user):
+     
+    #this admin sub menu runs a loop for maintenence promtps until exited 
+     while True:
+        print("\n \t Class Management Page!")
+        print("1. Add admin")
+        print("2. Delete Admin")
+        print("3. View all Admin")
+        print("0. Go back")
+
+
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            admin.create_new_admin(connection)
+        elif choice == "2":
+            admin.delete_admin(connection)
+        elif choice == "3":
+            admin.print_admin_table_data(connection)
+       
         elif choice == "0":
             return user
         else:

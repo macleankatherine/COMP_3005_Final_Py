@@ -721,6 +721,284 @@ def alter_billing(connection):
         if cursor:
             cursor.close()
 
+
+
+# ADMIN MANAGEMENT PAGE:
+
+def create_new_admin(connection):
+    try:
+        cursor = connection.cursor()
+        print("Please follow the following prompts to add a ned admin!.\n")
+
+        user = None
+
+        while True:
+            first_name = input("Enter first name: ")
+            if(first_name == "0"):
+                return None
+            elif(profile_management.valid_name(first_name)):
+                break
+
+        while True:
+            last_name = input("Enter last name: ")
+            if(last_name == "0"):
+                return None
+            elif(profile_management.valid_name(last_name)):
+                break
+
+
+        while True:
+            password = input("Enter password: ")
+            if(password == "0"):
+                return None
+            elif(profile_management.valid_password(password)):
+                break
+
+        while True:
+            phone_number = input("Enter phone number: ")
+            if(phone_number == "0"):
+                return None
+            elif(profile_management.valid_phone_number(phone_number)):
+                break
+
+        cursor.execute("INSERT INTO Administrators (first_name, last_name, password, phone_number) VALUES (%s, %s, %s, %s)",
+                       (first_name, last_name, password, phone_number))
+        connection.commit()
+
+        admin = get_admin_by_name(connection, first_name,last_name)
+        print(f"Admin {first_name} has been added successfully!")
+        return admin
+
+    except (Exception, psycopg2.Error) as error:
+        if connection:
+            print("Failed to add admin:", error)
+        else:
+            print("Failed to connect to database.")
+
+    finally:
+        if connection:
+            cursor.close()
+
+
+def create_new_trainer(connection):
+    try:
+        cursor = connection.cursor()
+        print("Please follow the following prompts to add a new trainer!.\n")
+
+        user = None
+
+        while True:
+            first_name = input("Enter first name: ")
+            if(first_name == "0"):
+                return None
+            elif(profile_management.valid_name(first_name)):
+                break
+
+        while True:
+            last_name = input("Enter last name: ")
+            if(last_name == "0"):
+                return None
+            elif(profile_management.valid_name(last_name)):
+                break
+
+
+        while True:
+            password = input("Enter password: ")
+            if(password == "0"):
+                return None
+            elif(profile_management.valid_password(password)):
+                break
+
+        while True:
+            phone_number = input("Enter phone number: ")
+            if(phone_number == "0"):
+                return None
+            elif(profile_management.valid_phone_number(phone_number)):
+                break
+
+        cursor.execute("INSERT INTO Trainers (first_name, last_name, password, phone_number) VALUES (%s, %s, %s, %s)",
+                       (first_name, last_name, password, phone_number))
+        connection.commit()
+
+        cursor.execute("SELECT * FROM Trainers WHERE phone_number=%s AND password=%s",(phone_number,password))
+        user = cursor.fetchone()
+        print (user)
+        print(f"Trainer {first_name} has been added successfully!")
+        return user
+
+    except (Exception, psycopg2.Error) as error:
+        if connection:
+            print("Failed to add trainer:", error)
+        else:
+            print("Failed to connect to database.")
+
+    finally:
+        if connection:
+            cursor.close()
+
+
+
+def create_new_trainer(connection):
+    try:
+        cursor = connection.cursor()
+        print("Please follow the following prompts to add a new trainer!.\n")
+
+        user = None
+
+        while True:
+            first_name = input("Enter first name: ")
+            if(first_name == "0"):
+                return None
+            elif(profile_management.valid_name(first_name)):
+                break
+
+        while True:
+            last_name = input("Enter last name: ")
+            if(last_name == "0"):
+                return None
+            elif(profile_management.valid_name(last_name)):
+                break
+
+
+        while True:
+            password = input("Enter password: ")
+            if(password == "0"):
+                return None
+            elif(profile_management.valid_password(password)):
+                break
+
+        while True:
+            phone_number = input("Enter phone number: ")
+            if(phone_number == "0"):
+                return None
+            elif(profile_management.valid_phone_number(phone_number)):
+                break
+
+        cursor.execute("INSERT INTO Trainers (first_name, last_name, password, phone_number) VALUES (%s, %s, %s, %s)",
+                       (first_name, last_name, password, phone_number))
+        connection.commit()
+
+        cursor.execute("SELECT * FROM Trainers WHERE phone_number=%s AND password=%s",(phone_number,password))
+        user = cursor.fetchone()
+        print (user)
+        print(f"Trainer {first_name} has been added successfully!")
+        return user
+
+    except (Exception, psycopg2.Error) as error:
+        if connection:
+            print("Failed to add trainer:", error)
+        else:
+            print("Failed to connect to database.")
+
+    finally:
+        if connection:
+            cursor.close()
+
+
+# DELETE FUNCTIONS:
+
+def delete_trainer(connection):
+
+    try:
+        cursor = connection.cursor()
+
+        personal_training_schedule.print_all_trainers(connection)
+        print("Please enter the Trainers ID to DELETE them!\n")
+
+        user = None
+
+        while True:
+            trainer_id = input("Trainer ID : ")
+            if(trainer_id == "0"):
+                return None
+            elif(not trainer_id.strip()==""):
+                break
+
+
+        cursor.execute("DELETE FROM Trainers WHERE trainer_id = %s",(trainer_id,))
+        connection.commit()
+
+        print (user)
+        print(f"Trainer with ID : {trainer_id} has been deleted successfully!")
+        return user
+
+    except (Exception, psycopg2.Error) as error:
+        if connection:
+            print("Failed to delete trainer:", error)
+        else:
+            print("Failed to connect to database.")
+
+    finally:
+        if connection:
+            cursor.close()
+
+
+def print_admin_table_data(connection):
+    try:
+        cursor = connection.cursor()
+
+        cursor.execute("""
+            SELECT admin_id, first_name, last_name, phone_number, password
+            FROM Administrators
+        """)
+        all_admin_records = cursor.fetchall()
+
+        if all_admin_records:
+            print("\n \t\t\tAdministrators Table Data:")
+            print("{:<10} {:<15} {:<15} {:<15} {:<15}".format("Admin ID", "First Name", "Last Name", "Phone Number", "Password"))
+            print("-" * 80)
+            for record in all_admin_records:
+                admin_id, first_name, last_name, phone_number, password = record
+                print("{:<10} {:<15} {:<15} {:<15} {:<15}".format(admin_id, first_name, last_name, phone_number, password))
+        else:
+            print("No administrator records found.")
+
+    except Exception as e:
+        print("Error fetching administrator records:", e)
+
+    finally:
+        if cursor:
+            cursor.close()
+
+def delete_admin(connection):
+
+    try:
+        cursor = connection.cursor()
+
+        personal_training_schedule.print_all_trainers(connection)
+        print_admin_table_data(connection)
+        print("Please enter the Admin ID to DELETE them!\n")
+
+        user = None
+
+        while True:
+            admin_id = input("Admin ID : ")
+            if(admin_id == "0"):
+                return None
+            elif(not admin_id.strip()==""):
+                break
+
+
+        cursor.execute("DELETE FROM Administrators WHERE admin_id = %s",(admin_id,))
+        connection.commit()
+
+        print (user)
+        print(f"Admin with ID : {admin_id} has been deleted successfully!")
+        return user
+
+    except (Exception, psycopg2.Error) as error:
+        if connection:
+            print("Failed to delete trainer:", error)
+        else:
+            print("Failed to connect to database.")
+
+    finally:
+        if connection:
+            cursor.close()
+
+
+
+
 # def add_group_class(connection):
 #     try:
 #         cursor = connection.cursor()
