@@ -59,8 +59,11 @@ def main_menu(connection):
 
         elif choice == "4":  #if admin
             clear_terminal()
-            user = admin_menu.admin_login_menu(connection)
-                 
+            administrator = admin.login_admin(connection)
+            if administrator:
+                administrator=admin_menu.admin_menu(connection,administrator)
+            else:
+                print(" ID or password was invalid")
         elif choice == "5":
             database.print_all_members(connection)
         elif choice == "6":

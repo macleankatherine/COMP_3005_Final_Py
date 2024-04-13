@@ -11,7 +11,7 @@ import group_schedule_management
 def register_admin(connection):
     try:
         cursor = connection.cursor()
-        print("Welcome new Admin!")
+        print("\nWelcome new Admin!")
         print("Thanks You for joining our fitness Team!.\n")
         print("Please follow the following prompts to get yourself set up!.\n")
 
@@ -56,7 +56,7 @@ def register_admin(connection):
 
     except (Exception, psycopg2.Error) as error:
         if connection:
-            print("Failed to register user:", error)
+            print("Failed to register admin:", error)
         else:
             print("Failed to connect to database.")
 
@@ -78,14 +78,14 @@ def login_admin(connection):
         while True:
             user = None
 
-            phone_number = input("Enter phone number: ")
-            if(phone_number == "0"):
+            admin_id = input("Enter your Admin ID: ")
+            if(admin_id == "0"):
               break
             password = input("Enter password: ")
             if(password == "0"):
               break
 
-            cursor.execute("SELECT * FROM Administrators WHERE phone_number = %s AND password = %s", (phone_number, password))
+            cursor.execute("SELECT * FROM Administrators WHERE admin_id = %s AND password = %s", (admin_id, password))
 
             #gets the user we're logging into
             user = cursor.fetchone()
@@ -330,6 +330,7 @@ def delete_room(connection):
 def print_group_schedule_data(connection):
     #first print personal session data
     print_personal_training_classes(connection)
+    print('')
     try:
         cursor = connection.cursor()
 
