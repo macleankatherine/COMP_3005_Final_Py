@@ -8,7 +8,7 @@ import database_operations
 import dashboard
 import admin
 import os
-import trainersmenu
+import trainers_menu
 import trainers
 
 def clear_terminal():
@@ -54,7 +54,7 @@ def main_menu(connection):
             trainer = trainers.trainer_login(connection)
             if(trainer):
                 clear_terminal
-                trainersmenu.trainer_menu(connection , trainer)
+                trainers_menu.trainer_menu(connection , trainer)
 
         elif choice == "4":  #if admin
             clear_terminal()
