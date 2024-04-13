@@ -7,6 +7,7 @@ import database
 import database_operations
 import dashboard
 import admin
+import admin_menu
 import os
 import trainers_menu
 import trainers
@@ -24,8 +25,8 @@ def main_menu(connection):
         print("3. Trainer ")
         print("4. Adminastrator")
         print("5. print members DEBuG")
-        print("7. Adminastrator Resigtiation ")
-        print("8. Adminastrator Login")
+        print("6. print members with goals DEBUG")
+
         print("0. Exit\n")
 
         choice = input("Enter your choice: ")
@@ -58,12 +59,13 @@ def main_menu(connection):
 
         elif choice == "4":  #if admin
             clear_terminal()
-            user = admin.register_admin(connection)
-            if(user):
-                print("admin registered ")
+            user = admin_menu.admin_login_menu(connection)
                  
         elif choice == "5":
             database.print_all_members(connection)
+        elif choice == "6":
+            database_operations.print_members_goals(connection)
+
         
         elif choice == "0":
             clear_terminal()
