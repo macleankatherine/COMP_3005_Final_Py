@@ -112,5 +112,6 @@ CREATE TABLE IF NOT EXISTS Billing(
     status BOOLEAN NOT NULL,
     amount FLOAT NOT NULL,
     billing_room_id INT REFERENCES room_bookings(booking_id),
+    billing_session_id INT REFERENCES personal_training_classes(class_id),
     member_id INT REFERENCES Members(member_id)
 );
