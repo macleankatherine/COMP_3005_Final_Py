@@ -996,59 +996,47 @@ def delete_admin(connection):
 
 
 
+#         # -- ALL ADMIN MENUS UNDER HERE ------------
+# #                       PLEASE READ
+# #To integrate this into the main menu just copy paste everything under here into the menu.pu file and 
+# # do somthing like this:
+# # if choide == "4" .    #Administrator
+# # elif choice == "4":  #if admin
+# #             clear_terminal()
+# #             user = admin_login_menu(connection)
+# # #connected to the Admin_login_menu fucntion that returns a user
+# # Login menu lead to main Admin menu and has back/cancel operation navigation on every page
+# #
+# def admin_login_menu(connection):
+#      while True:
 
-# def add_group_class(connection):
-#     try:
-#         cursor = connection.cursor()
-#         print("Please Follow all the prompts to create a new group class")
-#         print("All avalible trainers and rooms are listed above")
-        
-#         while True:
-#             name = input("Name of class : ")
-#             if(name == "0"):
-#                 return None
-#             elif(not (name.strip()=="")): # IF NOT EMPTY STRING, THEN ...
-#                 break
-#         while True:
-#             trainer_id = input("Trainer ID: ")
-#             if(trainer_id == "0"):
-#                 return None
-#             elif(not (trainer_id.strip()=="")): # IF NOT EMPTY STRING, THEN ...
-#                 break
-#         while True:
-#             details = input("Detail : ")
-#             if(details == "0"):
-#                 return None
-#             elif(not (details.strip()=="")): # IF NOT EMPTY STRING, THEN ...
-#                 break
-#         while True:
-#             room_id = input("Room ID : ")
-#             if(room_id == "0"):
-#                 return None
-#             elif(not (room_id.strip()=="")): # IF NOT EMPTY STRING, THEN ...
-#                 break
-        
+#         print("\nHello Admin")
+#         print("1. Register as Admin")
+#         print("2. Login as Admin")
+#         print("0. Go back\n")
 
+#         choice = input("Enter your choice: ")
 
-#         cursor.execute("DELETE FROM Equipment_maintentence WHERE request_id = %s",(req_id,)) 
-#         connection.commit()
-#         print(f"Reqest number {req_id} has officially been deleted")
-#     except Exception as e:
-#         print("Error deleting maintenance requests:", e)
-#     finally:
-#         if cursor:
-#             cursor.close()
+#         if choice == "1":
+#                 user = admin.register_admin(connection)
+#                 if(user):
+#                     print("New Admin registered Successfully ") #redicrect to next menu funciton
+#         elif choice == "2":
+#                 user = admin.login_admin(connection)
+#                 if(user):
+#                     print("Admin Successfully Logged in") #redicrect to next menu funciton
+#                     admin_menu (user)
+#         elif choice == "0":
+#             return None
 
+ 
+ 
 
-
-
-
-# -- ADMIN MENU UNDER HERE
-
-
+# # ------------ MAIN ADMIN MENU ------------------
+# #connects to a bunch of other menus
 # def admin_menu(connection, user):
 #      while True:
-#         print("Hello Admin", user[1])
+#         print("\n\tHello Admin", user[1])
 #         print("1. Equipment maintenence")
 #         print("2. Room managment")
 #         print("3. Class scheduling")
@@ -1060,18 +1048,30 @@ def delete_admin(connection):
 #         choice = input("Enter your choice: ")
 
 #         if choice == "1":
+#             clear_terminal()
 #             user = admin_maintenence_menu(connection,user)
 #         elif choice == "2":
+#             clear_terminal()
 #             user = admin_room_menu(connection,user)
 #         elif choice == "3":
+#             clear_terminal()
 #             user = admin_class_management_menu(connection,user)
+#         elif choice == "4":
+#             clear_terminal()
+#             user = admin_billing_management_menu(connection,user)
+#         elif choice == "5":
+#             clear_terminal()
+#             user = admin_trainer_management_menu(connection,user)
+#         elif choice == "6":
+#             clear_terminal()
+#             user = admin_admin_management_menu(connection,user)
 #         elif choice == "0":# go back to privious menu
 #             return user
 #         else:
 #             print("Invalid choice. Please try again.")
 
 
-
+# #Admin sub menu
 # def admin_maintenence_menu(connection, user):
      
 #     #this admin sub menu runs a loop for maintenence promtps until exited 
@@ -1094,7 +1094,7 @@ def delete_admin(connection):
 #         else:
 #             print("Invalid choice. Please try again.")
 
-        
+# #Admin sub menu
 # def admin_room_menu(connection, user):
      
 #     #this admin sub menu runs a loop for maintenence promtps until exited 
@@ -1119,13 +1119,13 @@ def delete_admin(connection):
 
 
 
-
+# #Admin sub menu
 # def admin_class_management_menu(connection, user):
      
 #     #this admin sub menu runs a loop for maintenence promtps until exited 
 #      while True:
 #         print("\n \t Class Management Page!")
-#         print("1. View all scheduled group classes")
+#         print("1. View all scheduled classes (Group & Personal)")
 #         print("2. Add new Group class")
 #         print("3. Delete Group class")
 #         print("4. Add personal session")
@@ -1152,28 +1152,81 @@ def delete_admin(connection):
 
 
 
-# def admin_class_management_menu(connection, user):
+# #Admin sub menu
+# def admin_billing_management_menu(connection, user):
      
 #     #this admin sub menu runs a loop for maintenence promtps until exited 
 #      while True:
 #         print("\n \t Class Management Page!")
-#         print("1. Add new trainer")
-#         print("3. Delete trainer")
+#         print("1. View all Bills")
+#         print("2. View all Due Bills")
+#         print("3. View all completed Transactions")
+#         print("4. Remove Bill")
+#         print("5. Edit Bill")
+#         print("0. Go back")
 
 
 #         choice = input("Enter your choice: ")
 #         if choice == "1":
-#             admin.print_group_schedule_data(connection)
+#             admin.print_billing(connection)
 #         elif choice == "2":
-#             admin.create_group_training_class(connection)
+#             admin.print_due_bills(connection)
 #         elif choice == "3":
-#             admin.delete_room(connection)
+#             admin.print_completed_bills(connection)
 #         elif choice == "4":
-#             personal_training_schedule.schedule_personal_training(connection,user)
+#             admin.delete_bill(connection)
 #         elif choice == "5":
-#             personal_training_schedule.cancel_personal_session(connection,user)
-        
+#             admin.alter_billing(connection)
 #         elif choice == "0":
 #             return user
 #         else:
 #             print("Invalid choice. Please try again.")
+
+# #Admin submenu
+# def admin_trainer_management_menu(connection, user):
+     
+#     #this admin sub menu runs a loop for maintenence promtps until exited 
+#      while True:
+#         print("\n \t Class Management Page!")
+#         print("1. Add trainer")
+#         print("2. Delete Trainer")
+#         print("3. View all Trainers")
+#         print("0. Go back")
+
+#         choice = input("Enter your choice: ")
+#         if choice == "1":
+#             admin.create_new_trainer(connection)
+#         elif choice == "2":
+#             admin.delete_trainer(connection)
+#         elif choice == "3":
+#             personal_training_schedule.print_all_trainers(connection)
+#         elif choice == "0":
+#             return user
+#         else:
+#             print("Invalid choice. Please try again.")
+
+# #Admin Sub Menu
+# def admin_admin_management_menu(connection, user):
+     
+#     #this admin sub menu runs a loop for maintenence promtps until exited 
+#      while True:
+#         print("\n \t Class Management Page!")
+#         print("1. Add admin")
+#         print("2. Delete Admin")
+#         print("3. View all Admin")
+#         print("0. Go back")
+
+
+#         choice = input("Enter your choice: ")
+#         if choice == "1":
+#             admin.create_new_admin(connection)
+#         elif choice == "2":
+#             admin.delete_admin(connection)
+#         elif choice == "3":
+#             admin.print_admin_table_data(connection)
+       
+#         elif choice == "0":
+#             return user
+#         else:
+#             print("Invalid choice. Please try again.")
+
