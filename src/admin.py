@@ -678,16 +678,14 @@ def alter_billing(connection):
         print("Please follow the promts to edit an existing bill.")
         print("Press Enter on any item to skip")
 
-        # Prompt the user for new attribute values
-        billing_id = input("Enter the Billing ID : ").capitalize()
-
+        billing_id = input("Enter the Billing ID : ")
         status = input("Enter new status (True/False): ").capitalize()
         amount = input("Enter new amount: ")
         billing_room_id = input("Enter new billing room ID: ")
         billing_session_id = input("Enter new billing session ID: ")
         member_id = input("Enter new member ID: ")
 
-        # Construct the SQL UPDATE statement based on the provided parameters
+        # make the update statment progressievly  based on the provided parameters
         update_query = "UPDATE Billing SET "
         update_values = []
 

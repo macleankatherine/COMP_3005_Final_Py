@@ -214,9 +214,17 @@ def schedule_perseonal_training_menu(connection, user):
 
 
 
-        # -- ADMIN MENU UNDER HERE ------------
-
-
+        # -- ALL ADMIN MENUS UNDER HERE ------------
+#                       PLEASE READ
+#To integrate this into the main menu just copy paste everything under here into the menu.pu file and 
+# do somthing like this:
+# if choide == "4" .    #Administrator
+# elif choice == "4":  #if admin
+#             clear_terminal()
+#             user = admin_login_menu(connection)
+# #connected to the Admin_login_menu fucntion that returns a user
+# Login menu lead to main Admin menu and has back/cancel operation navigation on every page
+#
 def admin_login_menu(connection):
      while True:
 
@@ -242,10 +250,11 @@ def admin_login_menu(connection):
  
  
 
-
+# ------------ MAIN ADMIN MENU ------------------
+#connects to a bunch of other menus
 def admin_menu(connection, user):
      while True:
-        print("Hello Admin", user[1])
+        print("\n\tHello Admin", user[1])
         print("1. Equipment maintenence")
         print("2. Room managment")
         print("3. Class scheduling")
@@ -280,7 +289,7 @@ def admin_menu(connection, user):
             print("Invalid choice. Please try again.")
 
 
-
+#Admin sub menu
 def admin_maintenence_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
@@ -303,7 +312,7 @@ def admin_maintenence_menu(connection, user):
         else:
             print("Invalid choice. Please try again.")
 
-        
+#Admin sub menu
 def admin_room_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
@@ -328,13 +337,13 @@ def admin_room_menu(connection, user):
 
 
 
-
+#Admin sub menu
 def admin_class_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
         print("\n \t Class Management Page!")
-        print("1. View all scheduled group classes")
+        print("1. View all scheduled classes (Group & Personal)")
         print("2. Add new Group class")
         print("3. Delete Group class")
         print("4. Add personal session")
@@ -361,7 +370,7 @@ def admin_class_management_menu(connection, user):
 
 
 
-
+#Admin sub menu
 def admin_billing_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
@@ -370,11 +379,8 @@ def admin_billing_management_menu(connection, user):
         print("1. View all Bills")
         print("2. View all Due Bills")
         print("3. View all completed Transactions")
-        print("4. Add bill")
-        print("5. Remove Bill")
-        print("6. Edit Bill")
-
-
+        print("4. Remove Bill")
+        print("5. Edit Bill")
         print("0. Go back")
 
 
@@ -386,16 +392,15 @@ def admin_billing_management_menu(connection, user):
         elif choice == "3":
             admin.print_completed_bills(connection)
         elif choice == "4":
-            admin.add_bill(connection)
-        elif choice == "5":
             admin.delete_bill(connection)
-        elif choice == "6":
+        elif choice == "5":
             admin.alter_billing(connection)
         elif choice == "0":
             return user
         else:
             print("Invalid choice. Please try again.")
 
+#Admin submenu
 def admin_trainer_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
@@ -406,10 +411,6 @@ def admin_trainer_management_menu(connection, user):
         print("3. View all Trainers")
         print("0. Go back")
 
-
-
-
-
         choice = input("Enter your choice: ")
         if choice == "1":
             admin.create_new_trainer(connection)
@@ -417,12 +418,12 @@ def admin_trainer_management_menu(connection, user):
             admin.delete_trainer(connection)
         elif choice == "3":
             personal_training_schedule.print_all_trainers(connection)
-       
         elif choice == "0":
             return user
         else:
             print("Invalid choice. Please try again.")
 
+#Admin Sub Menu
 def admin_admin_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
