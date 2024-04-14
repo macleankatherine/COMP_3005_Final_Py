@@ -2,15 +2,16 @@
  Implemented in Python
 
 # Title: Big Boss Man Fitness
+## Purpose: 
+Terminal application for a Health and Fitness Club Management System, serving
+as a comprehensive platform catering to the diverse needs of club members, trainers, and administrative staff.
+
 ## Authors: 
 - Katherine MacLean 101284088,
 - Adilet Ishenbov 101270126,
 - Simon Amable 101267294
 
-## Purpose: 
-Terminal application for a Health and Fitness Club Management System, serving
-as a comprehensive platform catering to the diverse needs of club members, trainers, and administrative staff.
-                                                           
+
 ## List Of Source Files:
 main.py admin_menu.py, admin.py, dashboard.py, database_operations.py, database.py, group_schedule_management, manage_fitness_achievements.py,    menu.py, personal_training_management.py, profile_managment.py, registration.py, registration.py, trainers_menu.py, trainers.py
 
