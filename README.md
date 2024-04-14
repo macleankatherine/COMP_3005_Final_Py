@@ -1,4 +1,3 @@
-# COMP_3005_Final_Py
 Final Project V2 3005
 Implemented in Python
 
