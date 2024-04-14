@@ -432,27 +432,79 @@ def create_group_training_class(connection):
             cursor.close()
 
 
+def cancel_group_training_class(connection):
+    try:
+        print_group_schedule_data(connection)
+
+        cursor = connection.cursor()
+
+        # Gather information for the new room booking
+        print("Enter the ID of the Group Fitness class you want to delete.")
+        class_id = input("Class ID: ")
+        
+
+        # Insert the new room booking into the database
+        cursor.execute("""
+            DELETE FROM group_training_classes WHERE class_id = %s
+        """, (class_id, ))
+       
+        print("\nA Group training class has been successfully deleted!")
+
+    except Exception as e:
+        print("Error creating group training class:", e)
+
+    finally:
+        if cursor:
+            cursor.close()
+
+
+
+def cancel_private_training_class(connection):
+    try:
+        print_group_schedule_data(connection)
+
+        cursor = connection.cursor()
+
+        # Gather information for the new room booking
+        print("Enter the ID of the personal Fitness class you want to delete.")
+        class_id = input("Class ID: ")
+        
+
+        # Insert the new room booking into the database
+        cursor.execute("""
+            DELETE FROM personal_training_classes WHERE class_id = %s
+        """, (class_id, ))
+       
+        print("\nA Personal training class has been successfully deleted!")
+
+    except Exception as e:
+        print("Error deleting personal training class:", e)
+
+    finally:
+        if cursor:
+            cursor.close()
 
 def delete_room(connection):
-    print_group_schedule_data(connection) #print current maintenence requests first
+    print_rooms(connection) #print current maintenence requests first
 
     try:
         cursor = connection.cursor()
-        print("Please Select a Group class by ID to delete it.")
-        print("all group classes are shown above")
+        print("Please Select a Room ID to delete it.")
+        print("all rooms are shown above")
 
         
         
         while True:
-            class_id = input("Class ID : ")
-            if(class_id == "0"):
+            room_id = input("Room ID : ")
+            if(room_id == "0"):
                 return None
-            elif(not (class_id.strip()=="")): # IF NOT EMPTY STRING, THEN ...
+            elif(not (room_id.strip()=="")): # IF NOT EMPTY STRING, THEN ...
                 break
 
 
-        cursor.execute("DELETE FROM Group_training_classes WHERE class_id = %s",(class_id,))
+        cursor.execute("DELETE FROM Rooms WHERE room_id = %s",(room_id,))
         connection.commit()
+        print (f"Room with ID : {room_id} was succesfully deleted")
     except Exception as e:
         print("Error Adding new room:", e)
     finally:

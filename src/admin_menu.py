@@ -25,29 +25,6 @@ def clear_terminal():
 # #
 
 
-# def admin_login_menu(connection):
-#      while True:
-
-#         print("\nHello Admin")
-#         print("1. Register as Admin")
-#         print("2. Login as Admin")
-#         print("0. Go back\n")
-
-#         choice = input("Enter your choice: ")
-
-#         if choice == "1":
-#                 user = admin.register_admin(connection)
-#                 if(user):
-#                     print("New Admin registered Successfully ") #redicrect to next menu funciton
-#         elif choice == "2":
-#                 user = admin.login_admin(connection)
-#                 if(user):
-#                     print("Admin Successfully Logged in") #redicrect to next menu funciton
-#                     admin_menu (connection,user)
-#         elif choice == "0":
-#             return None
-
- 
  
 
 # ------------ MAIN ADMIN MENU ------------------
@@ -168,7 +145,7 @@ def admin_class_management_menu(connection, user):
             admin.create_group_training_class(connection)
         elif choice == "3":
             clear_terminal()
-            admin.delete_room(connection)
+            admin.cancel_group_training_class(connection)
         elif choice == "4":
             clear_terminal()
             personal_training_schedule.schedule_personal_training(connection,user)
