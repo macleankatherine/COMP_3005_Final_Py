@@ -1,7 +1,15 @@
 # COMP_3005_Final_Py
- Final Project using Python
+ COMP 3005 Final Project using Python and a termial interface.
+ ## Youtube Video Demonstration link
+- https://www.youtube.com/watch?v=Hdhr0buNn60
 
-  python -m pip install psycopg2-binary
+## Compilation instructions
+ - python -m venv venv
+ - ./venv/Scripts/activate  # activate python virtual enviroment
+ - pip install psycopg2-binary
+ - python main.py
 
-To run go to src folder:
-python main.py
+## Members
+ - Katherine Maclean (101284088)
+ - Adilet Ishenbov 
+ - Simon Amable (101267294)
