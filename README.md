@@ -2,7 +2,10 @@
  Implemented in Python
 
 # Title: Big Boss Man Fitness
-## Author: Katherine MacLean 101284088, Adilet Ishenbov 101270126, Simon Amable 101267294
+## Authors: 
+- Katherine MacLean 101284088,
+- Adilet Ishenbov 101270126,
+- Simon Amable 101267294
 
 Purpose: Terminal application for a Health and Fitness Club Management System, serving
 as a comprehensive platform catering to the diverse needs of club members, trainers, and administrative staff.
