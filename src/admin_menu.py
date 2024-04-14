@@ -22,28 +22,30 @@ def clear_terminal():
 #             user = admin_login_menu(connection)
 # #connected to the Admin_login_menu fucntion that returns a user
 # Login menu lead to main Admin menu and has back/cancel operation navigation on every page
-#
-def admin_login_menu(connection):
-     while True:
+# #
 
-        print("\nHello Admin")
-        print("1. Register as Admin")
-        print("2. Login as Admin")
-        print("0. Go back\n")
 
-        choice = input("Enter your choice: ")
+# def admin_login_menu(connection):
+#      while True:
 
-        if choice == "1":
-                user = admin.register_admin(connection)
-                if(user):
-                    print("New Admin registered Successfully ") #redicrect to next menu funciton
-        elif choice == "2":
-                user = admin.login_admin(connection)
-                if(user):
-                    print("Admin Successfully Logged in") #redicrect to next menu funciton
-                    admin_menu (connection,user)
-        elif choice == "0":
-            return None
+#         print("\nHello Admin")
+#         print("1. Register as Admin")
+#         print("2. Login as Admin")
+#         print("0. Go back\n")
+
+#         choice = input("Enter your choice: ")
+
+#         if choice == "1":
+#                 user = admin.register_admin(connection)
+#                 if(user):
+#                     print("New Admin registered Successfully ") #redicrect to next menu funciton
+#         elif choice == "2":
+#                 user = admin.login_admin(connection)
+#                 if(user):
+#                     print("Admin Successfully Logged in") #redicrect to next menu funciton
+#                     admin_menu (connection,user)
+#         elif choice == "0":
+#             return None
 
  
  
@@ -51,15 +53,15 @@ def admin_login_menu(connection):
 # ------------ MAIN ADMIN MENU ------------------
 #connects to a bunch of other menus
 def admin_menu(connection, user):
+     clear_terminal()
      while True:
-        print("\n\tHello Admin", user[1])
+        print("\n\tHello Admin", user[1],"\n")
         print("1. Equipment maintenence")
         print("2. Room managment")
         print("3. Class scheduling")
         print("4. Billing and processing")
         print("5. Trainer management")
-        print("6. Admin Management")
-        print("")
+        print("6. Admin Management\n")
 
         choice = input("Enter your choice: ")
 
@@ -82,6 +84,7 @@ def admin_menu(connection, user):
             clear_terminal()
             user = admin_admin_management_menu(connection,user)
         elif choice == "0":# go back to privious menu
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
@@ -92,20 +95,24 @@ def admin_maintenence_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
-        print("Hello Admin", user[1])
+        print("\n \t Admin Maintenance Menu, ", user[1])
         print("1. View Maintenence requests")
         print("2. Add Maintenence requests")
         print("3. Remove Maintenence requests")
-        print("0. Go back")
+        print("0. Go back\n")
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            clear_terminal()
             admin.print_maintenence_requests(connection)
         elif choice == "2":
+            clear_terminal()
             admin.add_maintenence_requests(connection)
         elif choice == "3":
+            clear_terminal()
             admin.delete_maintenence_requests(connection)
         elif choice == "0":
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
@@ -115,20 +122,24 @@ def admin_room_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
-        print("Hello Admin", user[1])
+        print("\n \t Room Managemant Page,", user[1])
         print("1. View all rooms")
         print("2. Add room")
         print("3. Delete room")
-        print("0. Go back")
+        print("0. Go back\n")
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            clear_terminal()
             admin.print_rooms(connection)
         elif choice == "2":
+            clear_terminal()
             admin.add_room(connection)
         elif choice == "3":
+            clear_terminal()
             admin.delete_room(connection)
         elif choice == "0":
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
@@ -146,21 +157,27 @@ def admin_class_management_menu(connection, user):
         print("3. Delete Group class")
         print("4. Add personal session")
         print("5. Delete personal session")
-        print("0. Go back")
+        print("0. Go back\n")
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            clear_terminal()
             admin.print_group_schedule_data(connection)
         elif choice == "2":
+            clear_terminal()
             admin.create_group_training_class(connection)
         elif choice == "3":
+            clear_terminal()
             admin.delete_room(connection)
         elif choice == "4":
+            clear_terminal()
             personal_training_schedule.schedule_personal_training(connection,user)
         elif choice == "5":
+            clear_terminal()
             personal_training_schedule.cancel_personal_session(connection,user)
         
         elif choice == "0":
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
@@ -173,27 +190,33 @@ def admin_billing_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
-        print("\n \t Class Management Page!")
+        print("\n \t Billing Management Page!")
         print("1. View all Bills")
         print("2. View all Due Bills")
         print("3. View all completed Transactions")
         print("4. Remove Bill")
         print("5. Edit Bill")
-        print("0. Go back")
+        print("0. Go back\n")
 
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            clear_terminal()
             admin.print_billing(connection)
         elif choice == "2":
+            clear_terminal()
             admin.print_due_bills(connection)
         elif choice == "3":
+            clear_terminal()
             admin.print_completed_bills(connection)
         elif choice == "4":
+            clear_terminal()
             admin.delete_bill(connection)
         elif choice == "5":
+            clear_terminal()
             admin.alter_billing(connection)
         elif choice == "0":
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
@@ -203,20 +226,24 @@ def admin_trainer_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
-        print("\n \t Class Management Page!")
+        print("\n \t Trainer Management Page!")
         print("1. Add trainer")
         print("2. Delete Trainer")
         print("3. View all Trainers")
-        print("0. Go back")
+        print("0. Go back\n")
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            clear_terminal()
             admin.create_new_trainer(connection)
         elif choice == "2":
+            clear_terminal()
             admin.delete_trainer(connection)
         elif choice == "3":
+            clear_terminal()
             personal_training_schedule.print_all_trainers(connection)
         elif choice == "0":
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
@@ -226,22 +253,26 @@ def admin_admin_management_menu(connection, user):
      
     #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
-        print("\n \t Class Management Page!")
+        print("\n \t Admin Management Page!")
         print("1. Add admin")
         print("2. Delete Admin")
         print("3. View all Admin")
-        print("0. Go back")
+        print("0. Go back\n")
 
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            clear_terminal()
             admin.create_new_admin(connection)
         elif choice == "2":
+            clear_terminal()
             admin.delete_admin(connection)
         elif choice == "3":
+            clear_terminal()
             admin.print_admin_table_data(connection)
        
         elif choice == "0":
+            clear_terminal()
             return user
         else:
             print("Invalid choice. Please try again.")
