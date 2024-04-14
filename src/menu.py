@@ -18,7 +18,7 @@ def clear_terminal():
 def main_menu(connection):
     while True:
         clear_terminal()
-        print("\nWelcome to Fitness App!\n")
+        print("\nWelcome to Big Boss Man Fitness!\n")
         print("Who are you?")
         print("1. New User")
         print("2. Returning Member")
@@ -108,6 +108,7 @@ def update_member_menu(connection, user):
         print("1. Personal Information")
         print("2. Health Metrics")
         print("3. Health Goals")
+        print("4. Add Health Goal")
         print("0. Go Back\n")
 
         choice = input("Enter your choice: ")
@@ -124,6 +125,10 @@ def update_member_menu(connection, user):
             clear_terminal()
             user = profile_management.update_goal(connection, user)
 
+        elif choice == "4":
+            clear_terminal()
+            user = registration.register_health_goal(connection, user)
+            
         elif choice == "0":
             break
         else:
@@ -214,7 +219,7 @@ def schedule_personal_training_menu(connection, user):
 
         elif choice == "3":
             clear_terminal()
-            personal_training_schedule.cancel_personal_session(connection, user)
+            user = personal_training_schedule.cancel_personal_session(connection, user)
         elif choice == "0":
             return user
         else:

@@ -351,17 +351,24 @@ def cancel_personal_session(connection, user):
             else:
                 print("Please enter a number.")
         
+        # Check if the session is referenced in the billing table
+        cursor.execute("SELECT billing_id FROM billing WHERE billing_session_id = %s", (class_id,))
+        billing_records = cursor.fetchall()
+
+        if billing_records:
+            cursor.execute("DELETE FROM billing WHERE billing_session_id = %s", (class_id,))
+
+
         # Delete the personal training session entry
-        cursor.execute("DELETE FROM Personal_training_classes WHERE class_id = %s RETURNING booking_id", (class_id,))
+        cursor.execute("DELETE FROM personal_training_classes WHERE class_id = %s RETURNING booking_id", (class_id,))
         booking_id = cursor.fetchone()[0]
 
         # Delete the related room booking entry
-        cursor.execute("DELETE FROM Room_Bookings WHERE booking_id = %s", (booking_id,))
+        cursor.execute("DELETE FROM room_bookings WHERE booking_id = %s", (booking_id,))
         
         # Commit the transaction
         connection.commit()
-        
-        print("Personal training session canceled successfully.")
+        return user
     
     except (psycopg2.Error, Exception) as error:
         connection.rollback()
