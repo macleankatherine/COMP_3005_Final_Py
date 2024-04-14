@@ -19,9 +19,9 @@ https://github.com/macleankatherine/COMP_3005_Final_Py
 https://www.youtube.com/watch?v=Hdhr0buNn60 
 
 ## Install Instructions:
-python -m pip install psycopg2-binary
-Launching Instructions: Go to src directory
-python main.py
+- python -m pip install psycopg2-binary
+- Launching Instructions: Go to src directory
+- python main.py
 
 
 ## Usage:
