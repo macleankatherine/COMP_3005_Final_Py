@@ -87,7 +87,6 @@ def login_admin(connection):
 
             cursor.execute("SELECT * FROM Administrators WHERE admin_id = %s AND password = %s", (admin_id, password))
 
-            #gets the user we're logging into
             user = cursor.fetchone()
 
             if user:
@@ -265,7 +264,7 @@ def print_rooms(connection):
 
 
 def add_room(connection):
-    print_rooms(connection) #print current maintenence requests first
+    print_rooms(connection) #print current rooms  first
 
     try:
         cursor = connection.cursor()
@@ -357,7 +356,6 @@ def print_personal_training_classes(connection):
     try:
         cursor = connection.cursor()
 
-        # Fetch personal_training_classes table data
         cursor.execute("""
             SELECT ptc.class_id, t.first_name AS trainer_first_name, m.first_name AS member_first_name, 
                    ptc.booking_id, ptc.details
@@ -367,7 +365,6 @@ def print_personal_training_classes(connection):
         """)
         classes_data = cursor.fetchall()
 
-        # Print the data
         if classes_data:
             print("Personal Training Classes:")
             print("{:<10} {:<15} {:<15} {:<15} {:<25}".format("Class ID", "Trainer", "Member", "Booking ID", "Details"))
@@ -393,7 +390,7 @@ def create_group_training_class(connection):
     try:
         cursor = connection.cursor()
 
-        # Gather information for the new room booking
+        #get information for the new room booking, this function dosent validate
         print("Enter the details for the new room booking:")
         room_id = input("Room ID: ")
         day_of_week = input("Day of the week (e.g., Monday, Tuesday, etc.): ")
@@ -465,12 +462,10 @@ def cancel_private_training_class(connection):
 
         cursor = connection.cursor()
 
-        # Gather information for the new room booking
         print("Enter the ID of the personal Fitness class you want to delete.")
         class_id = input("Class ID: ")
         
 
-        # Insert the new room booking into the database
         cursor.execute("""
             DELETE FROM personal_training_classes WHERE class_id = %s
         """, (class_id, ))
@@ -680,14 +675,12 @@ def add_bill(connection):
             elif(not (staus.strip()=="")): # IF NOT EMPTY STRING, THEN ...
                 break
         
-                #amount
         while True:
             amount = input("Dollar Amount (ex 15.99) : ")
             if(amount == "0"):
                 return None
             elif(not (amount.strip()=="")): # IF NOT EMPTY STRING, THEN ...
                 break
-                #ROOM
         while True:
             print("Avaliable Rooms:")
             print_rooms(connection)

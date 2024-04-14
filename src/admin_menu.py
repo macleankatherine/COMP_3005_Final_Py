@@ -133,7 +133,6 @@ def admin_class_management_menu(connection, user):
         print("2. Add new Group class")
         print("3. Delete Group class")
         print("4. Add personal session")
-        print("5. Delete personal session")
         print("0. Go back\n")
 
         choice = input("Enter your choice: ")
@@ -149,9 +148,6 @@ def admin_class_management_menu(connection, user):
         elif choice == "4":
             clear_terminal()
             personal_training_schedule.schedule_personal_training(connection,user)
-        elif choice == "5":
-            clear_terminal()
-            personal_training_schedule.cancel_personal_session(connection,user)
         
         elif choice == "0":
             clear_terminal()
@@ -165,7 +161,6 @@ def admin_class_management_menu(connection, user):
 #Admin sub menu
 def admin_billing_management_menu(connection, user):
      
-    #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
         print("\n \t Billing Management Page!")
         print("1. View all Bills")
@@ -201,7 +196,6 @@ def admin_billing_management_menu(connection, user):
 #Admin submenu
 def admin_trainer_management_menu(connection, user):
      
-    #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
         print("\n \t Trainer Management Page!")
         print("1. Add trainer")
@@ -228,7 +222,6 @@ def admin_trainer_management_menu(connection, user):
 #Admin Sub Menu
 def admin_admin_management_menu(connection, user):
      
-    #this admin sub menu runs a loop for maintenence promtps until exited 
      while True:
         print("\n \t Admin Management Page!")
         print("1. Add admin")
