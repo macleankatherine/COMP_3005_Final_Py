@@ -1,5 +1,5 @@
 # Final Project V2 3005
-# Implemented in Python
+ Implemented in Python
 
 # Title: Big Boss Man Fitness
 ## Author: Katherine MacLean 101284088, Adilet Ishenbov 101270126, Simon Amable 101267294
