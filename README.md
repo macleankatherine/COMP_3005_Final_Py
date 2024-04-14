@@ -14,7 +14,7 @@ Github Link:
 https://github.com/macleankatherine/COMP_3005_Final_Py
 
 Video Demonstration:
-
+https://www.youtube.com/watch?v=Hdhr0buNn60 
 
 Install Instructions:
 python -m pip install psycopg2-binary
